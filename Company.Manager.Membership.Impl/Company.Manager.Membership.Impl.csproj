@@ -7,11 +7,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
-    <PackageReference Include="Microsoft.ServiceFabric.Services.Remoting" Version="3.0.456" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Company.Common.Data\Company.Common.Data.csproj" />
     <ProjectReference Include="..\Company.Engine.Registration.Interface\Company.Engine.Registration.Interface.csproj" />
     <ProjectReference Include="..\Company.Manager.Membership.Interface\Company.Manager.Membership.Interface.csproj" />
   </ItemGroup>
