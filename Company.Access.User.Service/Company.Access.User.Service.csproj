@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <IsServiceFabricServiceProject>True</IsServiceFabricServiceProject>
+    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ServiceFabric.Services" Version="3.0.456" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Company.Access.User.Impl\Company.Access.User.Impl.csproj" />
+    <ProjectReference Include="..\Company.Access.User.Interface\Company.Access.User.Interface.csproj" />
+    <ProjectReference Include="..\Company.ServiceFabric.Common\Company.ServiceFabric.Common.csproj" />
+    <ProjectReference Include="..\Company.ServiceFabric.Logging.Serilog\Company.ServiceFabric.Logging.Serilog.csproj" />
+  </ItemGroup>
+
+</Project>

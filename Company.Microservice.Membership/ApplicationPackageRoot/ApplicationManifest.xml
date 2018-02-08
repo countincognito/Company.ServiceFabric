@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="Company.Microservice.Membership" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <Parameters>
+    <Parameter Name="Service_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="Service_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="Service_PartitionCount" DefaultValue="1" />
+    <Parameter Name="Service_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="apiCertThumbprint" DefaultValue="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
+    <Parameter Name="seqLocation" DefaultValue="http://localhost:5341" />
+  </Parameters>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="Company.Api.Rest.RestApiPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides>
+      <ConfigOverride Name="Config">
+        <Settings>
+          <Section Name="ResourceSettings">
+            <Parameter Name="apiCertThumbprint" Value="[apiCertThumbprint]" />
+            <Parameter Name="seqLocation" Value="[seqLocation]" />
+          </Section>
+        </Settings>
+      </ConfigOverride>
+    </ConfigOverrides>
+    <!--<Policies>
+      <EndpointBindingPolicy EndpointRef="IRestApi" CertificateRef="ApiCert" />
+    </Policies>-->
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="Company.Manager.Membership.MembershipManagerPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides>
+      <ConfigOverride Name="Config">
+        <Settings>
+          <Section Name="ResourceSettings">
+            <Parameter Name="seqLocation" Value="[seqLocation]" />
+          </Section>
+        </Settings>
+      </ConfigOverride>
+    </ConfigOverrides>
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="Company.Engine.Registration.RegistrationEnginePkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides>
+      <ConfigOverride Name="Config">
+        <Settings>
+          <Section Name="ResourceSettings">
+            <Parameter Name="seqLocation" Value="[seqLocation]" />
+          </Section>
+        </Settings>
+      </ConfigOverride>
+    </ConfigOverrides>
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="Company.Access.User.UserAccessPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides>
+      <ConfigOverride Name="Config">
+        <Settings>
+          <Section Name="ResourceSettings">
+            <Parameter Name="seqLocation" Value="[seqLocation]" />
+          </Section>
+        </Settings>
+      </ConfigOverride>
+    </ConfigOverrides>
+  </ServiceManifestImport>
+  <DefaultServices>
+    <Service Name="RestApi" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="Company.Api.Rest.RestApi">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+    <Service Name="MembershipManager" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="Company.Manager.Membership.MembershipManager" InstanceCount="[Service_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+    <Service Name="RegistrationEngine" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="Company.Engine.Registration.RegistrationEngine" InstanceCount="[Service_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+    <Service Name="UserAccess" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="Company.Access.User.UserAccess" InstanceCount="[Service_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+  </DefaultServices>
+  <!--<Certificates>
+    <EndpointCertificate X509FindValue="[apiCertThumbprint]" Name="ApiCert" />
+  </Certificates>-->
+</ApplicationManifest>
