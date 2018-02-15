@@ -19,10 +19,12 @@ namespace Company.Api.Rest.Service
                 {
                     ConfigurationPackage configPackage = context.CodePackageActivationContext.GetConfigurationPackageObject(@"Config");
                     ILogger serilog = new LoggerConfiguration()
+                        .Enrich.WithServiceContext(context)
+                        .Enrich.WithAuditContext()
                         .WriteTo.Seq(configPackage.Settings.Sections[@"ResourceSettings"].Parameters[@"seqLocation"].Value)
                         .CreateLogger();
                     Log.Logger = serilog;
-                    return new RestApi(context, serilog.Enrich<RestApi>(context));
+                    return new RestApi(context, serilog.ToGeneric<RestApi>());
                 })
                 .GetAwaiter().GetResult();
 

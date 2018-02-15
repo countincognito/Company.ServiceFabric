@@ -2,6 +2,7 @@
 using Company.Engine.Registration.Interface;
 using Company.Manager.Membership.Interface;
 using Company.ServiceFabric.Client;
+using Company.ServiceFabric.Server;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.FabricTransport.Runtime;
@@ -27,7 +28,7 @@ namespace Company.Manager.Membership.Service
             : base(context)
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            var registrationEngine = Proxy.ForComponent<IRegistrationEngine>(this);
+            var registrationEngine = AuditableProxy.ForComponent<IRegistrationEngine>(this);
             _Impl = new Impl.MembershipManager(registrationEngine, logger);
             _Logger.LogInformation("Constructed");
         }
@@ -39,7 +40,7 @@ namespace Company.Manager.Membership.Service
                 new ServiceInstanceListener(
                     (context) => new FabricTransportServiceRemotingListener(
                         context,
-                        this,
+                        new AuditableServiceRemotingDispatcher(context, this),
                         new FabricTransportRemotingListenerSettings
                         {
                             EndpointResourceName = typeof(IMembershipManager).Name

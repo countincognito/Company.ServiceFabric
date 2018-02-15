@@ -19,10 +19,12 @@ namespace Company.Manager.Membership.Service
                 {
                     ConfigurationPackage configPackage = context.CodePackageActivationContext.GetConfigurationPackageObject(@"Config");
                     ILogger serilog = new LoggerConfiguration()
+                        .Enrich.WithServiceContext(context)
+                        .Enrich.WithAuditContext()
                         .WriteTo.Seq(configPackage.Settings.Sections[@"ResourceSettings"].Parameters[@"seqLocation"].Value)
                         .CreateLogger();
                     Log.Logger = serilog;
-                    return new MembershipManager(context, serilog.Enrich<MembershipManager>(context));
+                    return new MembershipManager(context, serilog.ToGeneric<MembershipManager>());
                 })
                 .GetAwaiter().GetResult();
 

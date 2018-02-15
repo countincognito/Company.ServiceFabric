@@ -19,6 +19,16 @@ namespace Company.ServiceFabric.Client
             return ServiceProxy.Create<I>(serviceAddress, partitionKey: partitionKey, listenerName: Naming.Listener<I>());
         }
 
+        internal static I ForService<I>(IServiceProxyFactory serviceProxyFactory, Uri serviceAddress, ServicePartitionKey partitionKey = null) where I : class, IService
+        {
+            if (serviceProxyFactory == null)
+            {
+                throw new ArgumentNullException(nameof(serviceProxyFactory), "Invalid node call. Must supply service proxy factory.");
+            }
+            Debug.Assert(typeof(I).IsInterface);
+            return serviceProxyFactory.CreateServiceProxy<I>(serviceAddress, partitionKey: partitionKey, listenerName: Naming.Listener<I>());
+        }
+
         private static I ForActor<I>(string instanceName, Actor caller) where I : class, IActor
         {
             Debug.Assert(typeof(I).IsInterface);
@@ -33,10 +43,48 @@ namespace Company.ServiceFabric.Client
             return ForService<I>(Addressing.Microservice<I>(), partitionKey);
         }
 
+        public static I ForMicroservice<I>(IServiceProxyFactory serviceProxyFactory, ServicePartitionKey partitionKey = null) where I : class, IService
+        {
+            if (serviceProxyFactory == null)
+            {
+                throw new ArgumentNullException(nameof(serviceProxyFactory), "Invalid microservice call. Must supply service proxy factory.");
+            }
+            Debug.Assert(
+                typeof(I).Namespace.Contains(Constant.Manager),
+                $"Invalid microservice call. Use only the {Constant.Manager} interface to access a microservice.");
+            return ForService<I>(serviceProxyFactory, Addressing.Microservice<I>(), partitionKey);
+        }
+
         public static I ForComponent<I>(StatelessService caller, ServicePartitionKey partitionKey = null) where I : class, IService
         {
             Debug.Assert(caller != null, "Invalid component call. Must supply stateless service caller.");
             return ForService<I>(Addressing.Component<I>(caller), partitionKey);
+        }
+
+        public static I ForComponent<I>(IServiceProxyFactory serviceProxyFactory, StatelessService caller, ServicePartitionKey partitionKey = null) where I : class, IService
+        {
+            if (serviceProxyFactory == null)
+            {
+                throw new ArgumentNullException(nameof(serviceProxyFactory), "Invalid component call. Must supply service proxy factory.");
+            }
+            Debug.Assert(caller != null, "Invalid component call. Must supply stateless service caller.");
+            return ForService<I>(serviceProxyFactory, Addressing.Component<I>(caller), partitionKey);
+        }
+
+        public static I ForComponent<I>(StatefulService caller, ServicePartitionKey partitionKey = null) where I : class, IService
+        {
+            Debug.Assert(caller != null, "Invalid component call. Must supply stateful service caller.");
+            return ForService<I>(Addressing.Component<I>(caller), partitionKey);
+        }
+
+        public static I ForComponent<I>(IServiceProxyFactory serviceProxyFactory, StatefulService caller, ServicePartitionKey partitionKey = null) where I : class, IService
+        {
+            if (serviceProxyFactory == null)
+            {
+                throw new ArgumentNullException(nameof(serviceProxyFactory), "Invalid component call. Must supply service proxy factory.");
+            }
+            Debug.Assert(caller != null, "Invalid component call. Must supply stateful service caller.");
+            return ForService<I>(serviceProxyFactory, Addressing.Component<I>(caller), partitionKey);
         }
 
         public static I ForAccessor<I>() where I : class, IActor

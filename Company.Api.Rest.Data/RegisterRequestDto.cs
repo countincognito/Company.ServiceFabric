@@ -2,6 +2,7 @@
 
 namespace Company.Api.Rest.Data
 {
+    [Serializable]
     public class RegisterRequestDto
     {
         public string Name { get; set; }

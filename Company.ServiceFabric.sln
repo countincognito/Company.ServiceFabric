@@ -67,6 +67,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.InProc.Membership", "T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Api.Rest.Data", "Company.Api.Rest.Data\Company.Api.Rest.Data.csproj", "{D4AA19B8-7546-4407-B88C-C05BE4C7F46A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.ServiceFabric.Server", "Company.ServiceFabric.Server\Company.ServiceFabric.Server.csproj", "{03DEBB55-0CA4-4A8A-8E58-0474D675E01D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -231,6 +233,14 @@ Global
 		{D4AA19B8-7546-4407-B88C-C05BE4C7F46A}.Release|Any CPU.Build.0 = Release|x64
 		{D4AA19B8-7546-4407-B88C-C05BE4C7F46A}.Release|x64.ActiveCfg = Release|x64
 		{D4AA19B8-7546-4407-B88C-C05BE4C7F46A}.Release|x64.Build.0 = Release|x64
+		{03DEBB55-0CA4-4A8A-8E58-0474D675E01D}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{03DEBB55-0CA4-4A8A-8E58-0474D675E01D}.Debug|Any CPU.Build.0 = Debug|x64
+		{03DEBB55-0CA4-4A8A-8E58-0474D675E01D}.Debug|x64.ActiveCfg = Debug|x64
+		{03DEBB55-0CA4-4A8A-8E58-0474D675E01D}.Debug|x64.Build.0 = Debug|x64
+		{03DEBB55-0CA4-4A8A-8E58-0474D675E01D}.Release|Any CPU.ActiveCfg = Release|x64
+		{03DEBB55-0CA4-4A8A-8E58-0474D675E01D}.Release|Any CPU.Build.0 = Release|x64
+		{03DEBB55-0CA4-4A8A-8E58-0474D675E01D}.Release|x64.ActiveCfg = Release|x64
+		{03DEBB55-0CA4-4A8A-8E58-0474D675E01D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -266,6 +276,7 @@ Global
 		{39153536-35FA-4299-BC67-C6046B7672EF} = {169793AC-E423-4693-90D3-A6ADACBA6DF4}
 		{BB48FA5F-6754-450F-9515-7A9F880EEFA8} = {E347F074-F94F-4F9E-BFE8-AD1214C3D28C}
 		{D4AA19B8-7546-4407-B88C-C05BE4C7F46A} = {5519B3D1-DB79-4810-819A-6D4C119DE566}
+		{03DEBB55-0CA4-4A8A-8E58-0474D675E01D} = {95AB7532-7371-49B7-A9FA-2B6E6556B6F7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC218BFE-9E81-4C30-9C3A-9968D023C724}

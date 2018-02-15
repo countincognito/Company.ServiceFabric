@@ -19,10 +19,12 @@ namespace Company.Engine.Registration.Service
                 {
                     ConfigurationPackage configPackage = context.CodePackageActivationContext.GetConfigurationPackageObject(@"Config");
                     ILogger serilog = new LoggerConfiguration()
+                        .Enrich.WithServiceContext(context)
+                        .Enrich.WithAuditContext()
                         .WriteTo.Seq(configPackage.Settings.Sections[@"ResourceSettings"].Parameters[@"seqLocation"].Value)
                         .CreateLogger();
                     Log.Logger = serilog;
-                    return new RegistrationEngine(context, serilog.Enrich<RegistrationEngine>(context));
+                    return new RegistrationEngine(context, serilog.ToGeneric<RegistrationEngine>());
                 })
                 .GetAwaiter().GetResult();
 

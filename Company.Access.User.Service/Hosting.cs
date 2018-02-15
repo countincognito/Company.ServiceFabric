@@ -19,10 +19,12 @@ namespace Company.Access.User.Service
                 {
                     ConfigurationPackage configPackage = context.CodePackageActivationContext.GetConfigurationPackageObject(@"Config");
                     ILogger serilog = new LoggerConfiguration()
+                        .Enrich.WithServiceContext(context)
+                        .Enrich.WithAuditContext()
                         .WriteTo.Seq(configPackage.Settings.Sections[@"ResourceSettings"].Parameters[@"seqLocation"].Value)
                         .CreateLogger();
                     Log.Logger = serilog;
-                    return new UserAccess(context, serilog.Enrich<UserAccess>(context));
+                    return new UserAccess(context, serilog.ToGeneric<UserAccess>());
                 })
                 .GetAwaiter().GetResult();
 

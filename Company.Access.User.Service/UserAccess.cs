@@ -1,4 +1,5 @@
 ﻿using Company.Access.User.Interface;
+using Company.ServiceFabric.Server;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.FabricTransport.Runtime;
@@ -35,7 +36,7 @@ namespace Company.Access.User.Service
                 new ServiceInstanceListener(
                     (context) => new FabricTransportServiceRemotingListener(
                         context,
-                        this,
+                        new AuditableServiceRemotingDispatcher(context, this),
                         new FabricTransportRemotingListenerSettings
                         {
                             EndpointResourceName = typeof(IUserAccess).Name

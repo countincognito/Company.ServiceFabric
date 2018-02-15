@@ -21,13 +21,14 @@ namespace Company.Api.Rest.Service
         {
             services.AddAutoMapper();
             services.AddMvc();
-            services.AddRouting(options =>
-            {
-                options.LowercaseUrls = true;
-            });
+            //services.AddRouting(options => // This doesn't work yet for some reason.
+            //{
+            //    options.LowercaseUrls = true;
+            //});
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                c.DocumentFilter<LowercaseDocumentFilter>();
             });
         }
 

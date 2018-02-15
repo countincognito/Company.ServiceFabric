@@ -42,7 +42,7 @@ namespace Test.Client.Membership
 
         public static IMembershipManager GetProxy()
         {
-            return Proxy.ForMicroservice<IMembershipManager>();
+            return AuditableProxy.ForMicroservice<IMembershipManager>();
         }
     }
 }

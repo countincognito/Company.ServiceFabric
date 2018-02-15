@@ -34,6 +34,21 @@ namespace Company.ServiceFabric.Common
             return new Uri($"{Constant.FabricScheme}/{namespaceSegments[1]}{Naming.Component<I>()}");
         }
 
+        public static Uri Component<I>(StatefulService caller) where I : IService
+        {
+            Debug.Assert(typeof(I).IsInterface);
+            string[] namespaceSegments = caller?.Context?.ServiceName?.Segments;
+            if (namespaceSegments == null)
+            {
+                throw new ArgumentNullException(nameof(namespaceSegments));
+            }
+            if (namespaceSegments.Length < Constant.NamespaceMinimumSize)
+            {
+                throw new FormatException(@"Component namespace is an invalid format.");
+            }
+            return new Uri($"{Constant.FabricScheme}/{namespaceSegments[1]}{Naming.Component<I>()}");
+        }
+
         public static Uri ActorAddress<I>() where I : IActor
         {
             return ActorAddress<I>(null);

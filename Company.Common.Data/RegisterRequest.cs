@@ -2,6 +2,7 @@
 
 namespace Company.Common.Data
 {
+    [Serializable]
     public class RegisterRequest
     {
         public string Name { get; set; }

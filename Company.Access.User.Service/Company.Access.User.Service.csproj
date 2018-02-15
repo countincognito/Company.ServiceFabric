@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Company.Access.User.Interface\Company.Access.User.Interface.csproj" />
     <ProjectReference Include="..\Company.ServiceFabric.Common\Company.ServiceFabric.Common.csproj" />
     <ProjectReference Include="..\Company.ServiceFabric.Logging.Serilog\Company.ServiceFabric.Logging.Serilog.csproj" />
+    <ProjectReference Include="..\Company.ServiceFabric.Server\Company.ServiceFabric.Server.csproj" />
   </ItemGroup>
 
 </Project>

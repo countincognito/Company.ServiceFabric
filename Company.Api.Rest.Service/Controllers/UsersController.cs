@@ -31,7 +31,7 @@ namespace Company.Api.Rest.Service
             try
             {
                 var request = _Mapper.Map<RegisterRequest>(requestDto);
-                IMembershipManager proxy = Proxy.ForMicroservice<IMembershipManager>();
+                IMembershipManager proxy = AuditableProxy.ForMicroservice<IMembershipManager>();
                 string result = await proxy.RegisterMemberAsync(request);
                 if (!string.IsNullOrWhiteSpace(result))
                 {

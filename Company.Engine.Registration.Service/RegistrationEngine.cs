@@ -2,6 +2,7 @@
 using Company.Common.Data;
 using Company.Engine.Registration.Interface;
 using Company.ServiceFabric.Client;
+using Company.ServiceFabric.Server;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.FabricTransport.Runtime;
@@ -27,7 +28,7 @@ namespace Company.Engine.Registration.Service
             : base(context)
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            var userAccess = Proxy.ForComponent<IUserAccess>(this);
+            var userAccess = AuditableProxy.ForComponent<IUserAccess>(this);
             _Impl = new Impl.RegistrationEngine(userAccess, logger);
             _Logger.LogInformation("Constructed");
         }
@@ -39,7 +40,7 @@ namespace Company.Engine.Registration.Service
                 new ServiceInstanceListener(
                     (context) => new FabricTransportServiceRemotingListener(
                         context,
-                        this,
+                        new AuditableServiceRemotingDispatcher(context, this),
                         new FabricTransportRemotingListenerSettings
                         {
                             EndpointResourceName = typeof(IRegistrationEngine).Name
