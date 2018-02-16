@@ -32,8 +32,8 @@ namespace Company.ServiceFabric.Logging.Serilog
             {
                 new PropertyEnricher(nameof(context.ServiceName), context.ServiceName),
                 new PropertyEnricher(nameof(context.ServiceTypeName), context.ServiceTypeName),
-                new PropertyEnricher(nameof(context.ReplicaOrInstanceId), context.ReplicaOrInstanceId),
-                new PropertyEnricher(nameof(context.PartitionId), context.PartitionId),
+                new PropertyEnricher(nameof(context.ReplicaOrInstanceId), context.ReplicaOrInstanceId.ToString()),
+                new PropertyEnricher(nameof(context.PartitionId), context.PartitionId.ToString()),
                 new PropertyEnricher(nameof(context.CodePackageActivationContext.ApplicationName), context.CodePackageActivationContext.ApplicationName),
                 new PropertyEnricher(nameof(context.CodePackageActivationContext.ApplicationTypeName), context.CodePackageActivationContext.ApplicationTypeName),
                 new PropertyEnricher(nameof(context.NodeContext.NodeName), context.NodeContext.NodeName),

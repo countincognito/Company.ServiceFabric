@@ -2,6 +2,7 @@
 
 namespace Company.ServiceFabric.Common
 {
+    [Serializable]
     public class AuditContext
     {
         static AuditContext()

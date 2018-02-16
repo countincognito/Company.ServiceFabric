@@ -10,7 +10,8 @@ namespace Company.ServiceFabric.Logging.Serilog
         /// <summary>
         /// The property name added to enriched log events.
         /// </summary>
-        public const string CallChainPropertyName = nameof(AuditContext.CallChainId);
+        public const string CallChainIdPropertyName = nameof(AuditContext.CallChainId);
+        public const string OriginatorUtcTimestampPropertyName = nameof(AuditContext.OriginatorUtcTimestamp);
 
         /// <summary>
         /// Enrich the log event.
@@ -22,7 +23,8 @@ namespace Company.ServiceFabric.Logging.Serilog
             AuditContext context = AuditContext.Current;
             if (context != null)
             {
-                logEvent.AddPropertyIfAbsent(new LogEventProperty(CallChainPropertyName, new ScalarValue(context.CallChainId)));
+                logEvent.AddPropertyIfAbsent(new LogEventProperty(CallChainIdPropertyName, new ScalarValue(context.CallChainId)));
+                logEvent.AddPropertyIfAbsent(new LogEventProperty(OriginatorUtcTimestampPropertyName, new ScalarValue(context.OriginatorUtcTimestamp)));
             }
         }
     }
