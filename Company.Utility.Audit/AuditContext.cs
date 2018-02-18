@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Company.ServiceFabric.Common
+namespace Company.Utility.Audit
 {
     [Serializable]
     public class AuditContext
@@ -33,6 +33,11 @@ namespace Company.ServiceFabric.Common
             {
                 AmbientContext.SetData(value);
             }
+        }
+
+        public static void ClearCurrent()
+        {
+            AmbientContext.Clear<AuditContext>();
         }
 
         public Guid CallChainId

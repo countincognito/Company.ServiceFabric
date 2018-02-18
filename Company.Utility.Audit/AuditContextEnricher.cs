@@ -1,8 +1,7 @@
-﻿using Company.ServiceFabric.Common;
-using Serilog.Core;
+﻿using Serilog.Core;
 using Serilog.Events;
 
-namespace Company.ServiceFabric.Logging.Serilog
+namespace Company.Utility.Audit
 {
     public class AuditContextEnricher
         : ILogEventEnricher

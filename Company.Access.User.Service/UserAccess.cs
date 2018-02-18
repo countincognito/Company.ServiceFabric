@@ -1,5 +1,6 @@
 ﻿using Company.Access.User.Interface;
 using Company.ServiceFabric.Server;
+using Company.Utility.Audit;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.FabricTransport.Runtime;
@@ -25,7 +26,9 @@ namespace Company.Access.User.Service
             : base(context)
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _Impl = new Impl.UserAccess(logger);
+            _Impl = AuditableWrapper.Create<IUserAccess, Impl.UserAccess>(
+                new Impl.UserAccess(logger),
+                logger);
             _Logger.LogInformation("Constructed");
         }
 

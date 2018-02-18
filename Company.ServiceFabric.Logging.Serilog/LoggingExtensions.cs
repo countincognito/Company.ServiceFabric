@@ -1,5 +1,4 @@
-﻿using Microsoft.ServiceFabric.Services.Remoting;
-using Serilog;
+﻿using Serilog;
 using Serilog.Configuration;
 using Serilog.Core.Enrichers;
 using System;
@@ -7,17 +6,8 @@ using System.Fabric;
 
 namespace Company.ServiceFabric.Logging.Serilog
 {
-    public static class Extensions
+    public static class LoggingExtensions
     {
-        public static LoggerConfiguration WithAuditContext(this LoggerEnrichmentConfiguration enrichmentConfiguration)
-        {
-            if (enrichmentConfiguration == null)
-            {
-                throw new ArgumentNullException(nameof(enrichmentConfiguration));
-            }
-            return enrichmentConfiguration.With<AuditContextEnricher>();
-        }
-
         public static LoggerConfiguration WithServiceContext(this LoggerEnrichmentConfiguration enrichmentConfiguration, ServiceContext context)
         {
             if (enrichmentConfiguration == null)
@@ -40,16 +30,6 @@ namespace Company.ServiceFabric.Logging.Serilog
                 new PropertyEnricher(nameof(context.TraceId), context.TraceId),
             };
             return enrichmentConfiguration.With(propertyEnrichers);
-        }
-
-        public static Microsoft.Extensions.Logging.ILogger<T> ToGeneric<T>(this ILogger logger) where T : IService
-        {
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
-            return Microsoft.Extensions.Logging.LoggerFactoryExtensions.CreateLogger<T>(
-                new Microsoft.Extensions.Logging.LoggerFactory().AddSerilog(logger));
         }
     }
 }

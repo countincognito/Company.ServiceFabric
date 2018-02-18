@@ -3,6 +3,7 @@ using Company.Engine.Registration.Interface;
 using Company.Manager.Membership.Interface;
 using Company.ServiceFabric.Client;
 using Company.ServiceFabric.Server;
+using Company.Utility.Audit;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.FabricTransport.Runtime;
@@ -29,7 +30,9 @@ namespace Company.Manager.Membership.Service
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             var registrationEngine = AuditableProxy.ForComponent<IRegistrationEngine>(this);
-            _Impl = new Impl.MembershipManager(registrationEngine, logger);
+            _Impl = AuditableWrapper.Create<IMembershipManager, Impl.MembershipManager>(
+                new Impl.MembershipManager(registrationEngine, logger),
+                logger);
             _Logger.LogInformation("Constructed");
         }
 

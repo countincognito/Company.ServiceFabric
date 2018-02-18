@@ -3,6 +3,7 @@ using Company.Common.Data;
 using Company.Engine.Registration.Interface;
 using Company.ServiceFabric.Client;
 using Company.ServiceFabric.Server;
+using Company.Utility.Audit;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.FabricTransport.Runtime;
@@ -29,7 +30,9 @@ namespace Company.Engine.Registration.Service
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             var userAccess = AuditableProxy.ForComponent<IUserAccess>(this);
-            _Impl = new Impl.RegistrationEngine(userAccess, logger);
+            _Impl = AuditableWrapper.Create<IRegistrationEngine, Impl.RegistrationEngine>(
+                new Impl.RegistrationEngine(userAccess, logger),
+                logger);
             _Logger.LogInformation("Constructed");
         }
 

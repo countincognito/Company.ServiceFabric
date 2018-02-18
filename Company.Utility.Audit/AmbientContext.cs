@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace Company.ServiceFabric.Common
+namespace Company.Utility.Audit
 {
     /// <summary>
     /// Provides a way to set contextual data that flows with the call and 
@@ -30,6 +30,11 @@ namespace Company.ServiceFabric.Common
         public static T GetData<T>() where T : class
         {
             return _State.TryGetValue(typeof(T), out AsyncLocal<object> data) ? (T)data.Value : null;
+        }
+
+        public static void Clear<T>() where T : class
+        {
+            _State.TryRemove(typeof(T), out AsyncLocal<object> data);
         }
     }
 }

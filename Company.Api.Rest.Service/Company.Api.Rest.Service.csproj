@@ -36,6 +36,8 @@
     <ProjectReference Include="..\Company.ServiceFabric.Client\Company.ServiceFabric.Client.csproj" />
     <ProjectReference Include="..\Company.ServiceFabric.Common\Company.ServiceFabric.Common.csproj" />
     <ProjectReference Include="..\Company.ServiceFabric.Logging.Serilog\Company.ServiceFabric.Logging.Serilog.csproj" />
+    <ProjectReference Include="..\Company.Utility.Audit\Company.Utility.Audit.csproj" />
+    <ProjectReference Include="..\Company.Utility.Logging.Serilog\Company.Utility.Logging.Serilog.csproj" />
   </ItemGroup>
 
 </Project>

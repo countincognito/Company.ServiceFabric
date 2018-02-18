@@ -5,7 +5,9 @@ using Company.Engine.Registration.Impl;
 using Company.Engine.Registration.Interface;
 using Company.Manager.Membership.Impl;
 using Company.Manager.Membership.Interface;
-using Microsoft.Extensions.Logging.Abstractions;
+using Company.Utility.Audit;
+using Company.Utility.Logging.Serilog;
+using Serilog;
 using System;
 using System.Threading.Tasks;
 
@@ -13,6 +15,8 @@ namespace Test.InProc.Membership
 {
     public class Client
     {
+
+
         static async Task Test_QueryMembership()
         {
             try
@@ -47,11 +51,23 @@ namespace Test.InProc.Membership
 
         public static IMembershipManager GetProxy()
         {
-            return new MembershipManager(
-                new RegistrationEngine(
-                    new UserAccess(new NullLogger<IUserAccess>()),
-                    new NullLogger<IRegistrationEngine>()),
-                new NullLogger<IMembershipManager>());
+
+            var _Serilog = new LoggerConfiguration()
+                .Enrich.WithAuditContext()
+                .WriteTo.Seq("http://localhost:5341")
+                .CreateLogger();
+
+
+            var userAccessLogger = _Serilog.ToGeneric<IUserAccess>();
+            var userAccess = AuditableWrapper.Create(new UserAccess(userAccessLogger), userAccessLogger);
+
+            var registrationEngineLogger = _Serilog.ToGeneric<IRegistrationEngine>();
+            var registrationEngine = AuditableWrapper.Create(new RegistrationEngine(userAccess, registrationEngineLogger), registrationEngineLogger);
+
+            var membershipManagerLogger = _Serilog.ToGeneric<IMembershipManager>();
+            var membershipManager = AuditableWrapper.Create(new MembershipManager(registrationEngine, membershipManagerLogger), membershipManagerLogger);
+
+            return membershipManager;
         }
     }
 }

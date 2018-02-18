@@ -1,4 +1,5 @@
-﻿using Microsoft.ServiceFabric.Services.Remoting.V2;
+﻿using Company.Utility.Audit;
+using Microsoft.ServiceFabric.Services.Remoting.V2;
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -43,7 +44,7 @@ namespace Company.ServiceFabric.Common
             return Guid.NewGuid();
         }
 
-        public static AuditContext Create()
+        private static AuditContext Create()
         {
             return new AuditContext(NewInstanceId(), DateTime.UtcNow);
         }
