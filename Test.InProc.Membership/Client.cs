@@ -9,13 +9,69 @@ using Company.Utility.Audit;
 using Company.Utility.Logging.Serilog;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Test.InProc.Membership
 {
     public class Client
     {
-        static async Task Test_QueryMembership()
+        static void Test_QueryMembershipConcurrent(ILogger serilog)
+        {
+            try
+            {
+                Console.WriteLine("\r\nConcurrent...");
+
+                var proxy = GetProxy(serilog);
+                var tasks = new List<Task<string>>();
+                for (int i = 0; i < 10; i++)
+                {
+                    // THIS IS NECESSARY FOR INPROC CALLS.
+                    AuditContext.NewCurrent();
+
+                    Task<string> response = proxy.RegisterMemberAsync(GetRegisterRequest(AuditContext.Current.CallChainId.ToString()));
+                    tasks.Add(response);
+                }
+                Task.WaitAll(tasks.ToArray());
+
+                foreach (var item in tasks)
+                {
+                    Console.WriteLine(item.Result);
+                }
+
+                Console.WriteLine("\r\nFinished...");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Test Exception: " + ex.Message);
+            }
+        }
+
+        static async Task Test_QueryMembershipSequential(ILogger serilog)
+        {
+            try
+            {
+                Console.WriteLine("\r\nSequential...");
+
+                var proxy = GetProxy(serilog);
+                for (int i = 0; i < 10; i++)
+                {
+                    // THIS IS NECESSARY FOR INPROC CALLS.
+                    AuditContext.NewCurrent();
+
+                    string response = await proxy.RegisterMemberAsync(GetRegisterRequest(AuditContext.Current.CallChainId.ToString()));
+                    Console.WriteLine(response);
+                }
+
+                Console.WriteLine("\r\nFinished...");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Test Exception: " + ex.Message);
+            }
+        }
+
+        public static void Test()
         {
             ILogger serilog = new LoggerConfiguration()
                 .Enrich.WithAuditContext()
@@ -23,35 +79,11 @@ namespace Test.InProc.Membership
                 .CreateLogger();
             Log.Logger = serilog;
 
-            try
-            {
-                ConsoleKeyInfo? input = null;
-                while (!input.HasValue)
-                {
-                    var proxy = GetProxy(serilog);
-                    string response = await proxy.RegisterMemberAsync(
-                        new RegisterRequest
-                        {
-                            Name = "Bob",
-                            Email = "example@example.com",
-                            Password = "Random",
-                            DateOfBirth = new DateTime(1970, 1, 1),
-                        });
-                    Console.WriteLine(response);
-                    Task.Factory.StartNew(() => input = Console.ReadKey()).Wait(TimeSpan.FromSeconds(0.1));
-                }
-                Console.WriteLine("\r\nFinished...");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Test Exception: " + ex.Message);
-            }
-            Log.CloseAndFlush();
-        }
+            Test_QueryMembershipConcurrent(serilog);
+            Test_QueryMembershipSequential(serilog).Wait();
 
-        public static void Test()
-        {
-            Test_QueryMembership().Wait();
+            Console.ReadKey();
+            Log.CloseAndFlush();
         }
 
         public static IMembershipManager GetProxy(ILogger serilog)
@@ -66,6 +98,17 @@ namespace Test.InProc.Membership
             var membershipManager = AuditableWrapper.Create(new MembershipManager(registrationEngine, membershipManagerLogger), membershipManagerLogger);
 
             return membershipManager;
+        }
+
+        public static RegisterRequest GetRegisterRequest(string name)
+        {
+            return new RegisterRequest
+            {
+                Name = name,
+                Email = "example@example.com",
+                Password = "Random",
+                DateOfBirth = new DateTime(1970, 1, 1),
+            };
         }
     }
 }

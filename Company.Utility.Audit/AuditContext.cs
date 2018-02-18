@@ -35,11 +35,6 @@ namespace Company.Utility.Audit
             }
         }
 
-        public static void ClearCurrent()
-        {
-            AmbientContext.Clear<AuditContext>();
-        }
-
         public Guid CallChainId
         {
             get;
@@ -48,6 +43,36 @@ namespace Company.Utility.Audit
         public DateTime OriginatorUtcTimestamp
         {
             get;
+        }
+
+        public static void NewCurrent()
+        {
+            ClearCurrent();
+            Current = Create();
+        }
+
+        public static void NewCurrentIfEmpty()
+        {
+            AuditContext context = Current;
+            if (context == null)
+            {
+                NewCurrent();
+            }
+        }
+
+        public static void ClearCurrent()
+        {
+            AmbientContext.Clear<AuditContext>();
+        }
+
+        private static Guid NewInstanceId()
+        {
+            return Guid.NewGuid();
+        }
+
+        private static AuditContext Create()
+        {
+            return new AuditContext(NewInstanceId(), DateTime.UtcNow);
         }
     }
 }

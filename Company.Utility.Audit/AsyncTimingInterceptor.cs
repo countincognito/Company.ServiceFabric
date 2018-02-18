@@ -5,19 +5,18 @@ using System.Diagnostics;
 
 namespace Company.Utility.Audit
 {
-    public class AuditableAsyncTimingInterceptor<T>
+    public class AsyncTimingInterceptor<T>
          : AsyncTimingInterceptor
     {
         private readonly ILogger<T> _Logger;
 
-        public AuditableAsyncTimingInterceptor(ILogger<T> logger)
+        public AsyncTimingInterceptor(ILogger<T> logger)
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         protected override void StartingTiming(IInvocation invocation)
         {
-            AuditHelper.SetAuditContext();
             _Logger.LogInformation($"{invocation.Method.Name}:StartingTiming");
         }
 

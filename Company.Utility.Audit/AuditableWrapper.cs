@@ -12,7 +12,8 @@ namespace Company.Utility.Audit
             AuditContext.ClearCurrent();
             return _ProxyGenerator.CreateInterfaceProxyWithTargetInterface<I>(
                 instance,
-                new AuditableAsyncTimingInterceptor<I>(logger).ToInterceptor());
+                new AsyncAuditableInterceptor().ToInterceptor(),
+                new AsyncTimingInterceptor<I>(logger).ToInterceptor());
         }
     }
 }

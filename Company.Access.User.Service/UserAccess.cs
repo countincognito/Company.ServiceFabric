@@ -26,9 +26,7 @@ namespace Company.Access.User.Service
             : base(context)
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _Impl = AuditableWrapper.Create<IUserAccess, Impl.UserAccess>(
-                new Impl.UserAccess(logger),
-                logger);
+            _Impl = AuditableWrapper.Create(new Impl.UserAccess(logger), logger);
             _Logger.LogInformation("Constructed");
         }
 
@@ -60,14 +58,14 @@ namespace Company.Access.User.Service
             base.OnAbort();
         }
 
-        public Task<bool> CheckUserExistsAsync(string email)
+        public Task<bool> CheckUserExistsAsync(string name)
         {
-            return _Impl.CheckUserExistsAsync(email);
+            return _Impl.CheckUserExistsAsync(name);
         }
 
-        public Task<string> CreateUserAsync(string email)
+        public Task<string> CreateUserAsync(string name)
         {
-            return _Impl.CreateUserAsync(email);
+            return _Impl.CreateUserAsync(name);
         }
     }
 }

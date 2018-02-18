@@ -1,6 +1,7 @@
 ﻿using Company.Utility.Audit;
 using Microsoft.ServiceFabric.Services.Remoting.V2;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -39,16 +40,6 @@ namespace Company.ServiceFabric.Common
             }
         }
 
-        private static Guid NewInstanceId()
-        {
-            return Guid.NewGuid();
-        }
-
-        private static AuditContext Create()
-        {
-            return new AuditContext(NewInstanceId(), DateTime.UtcNow);
-        }
-
         public static IServiceRemotingRequestMessage ProcessRequest(IServiceRemotingRequestMessage requestMessage)
         {
             if (requestMessage == null)
@@ -63,32 +54,23 @@ namespace Company.ServiceFabric.Common
                 return requestMessage;
             }
 
-            // Retrieve the audit context from the ambient context, if it exists.
-            AuditContext context = AuditContext.Current;
-
             // Retrieve the audit context from the message header, if it exists.
             if (requestMessageHeader.TryGetHeaderValue(AuditContext.Name, out byte[] byteArray))
             {
                 // If an audit context exists in the message header, always use it to replace the ambient context.
-                context = (AuditContext)DeSerialize(byteArray);
-                AuditContext.Current = context;
+                AuditContext.Current = (AuditContext)DeSerialize(byteArray);
             }
             else
             {
-                // If no audit context exists in the message header, but does in the ambient context, copy it over.
-                if (context != null)
-                {
-                    byteArray = Serialize(context);
-                    requestMessageHeader.AddHeader(AuditContext.Name, byteArray);
-                }
-                else
-                {
-                    // If no audit context exists anywhere, then create one and copy it to the message header and ambient context.
-                    context = Create();
-                    byteArray = Serialize(context);
-                    requestMessageHeader.AddHeader(AuditContext.Name, byteArray);
-                    AuditContext.Current = context;
-                }
+                // If no audit context exists then create one.
+                AuditContext.NewCurrentIfEmpty();
+
+                AuditContext context = AuditContext.Current;
+                Debug.Assert(context != null);
+
+                // Copy the audit context to the message header.
+                byteArray = Serialize(context);
+                requestMessageHeader.AddHeader(AuditContext.Name, byteArray);
             }
 
             return requestMessage;
@@ -108,32 +90,23 @@ namespace Company.ServiceFabric.Common
                 return responseMessage;
             }
 
-            // Retrieve the audit context from the ambient context, if it exists.
-            AuditContext context = AuditContext.Current;
-
             // Retrieve the audit context from the message header, if it exists.
             if (responseMessageHeader.TryGetHeaderValue(AuditContext.Name, out byte[] byteArray))
             {
                 // If an audit context exists in the message header, always use it to replace the ambient context.
-                context = (AuditContext)DeSerialize(byteArray);
-                AuditContext.Current = context;
+                AuditContext.Current = (AuditContext)DeSerialize(byteArray);
             }
             else
             {
-                // If no audit context exists in the message header, but does in the ambient context, copy it over.
-                if (context != null)
-                {
-                    byteArray = Serialize(context);
-                    responseMessageHeader.AddHeader(AuditContext.Name, byteArray);
-                }
-                else
-                {
-                    // If no audit context exists anywhere, then create one and copy it to the message header and ambient context.
-                    context = Create();
-                    byteArray = Serialize(context);
-                    responseMessageHeader.AddHeader(AuditContext.Name, byteArray);
-                    AuditContext.Current = context;
-                }
+                // If no audit context exists then create one.
+                AuditContext.NewCurrentIfEmpty();
+
+                AuditContext context = AuditContext.Current;
+                Debug.Assert(context != null);
+
+                // Copy the audit context to the message header.
+                byteArray = Serialize(context);
+                responseMessageHeader.AddHeader(AuditContext.Name, byteArray);
             }
 
             return responseMessage;

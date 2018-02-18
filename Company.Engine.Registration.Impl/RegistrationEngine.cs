@@ -24,14 +24,15 @@ namespace Company.Engine.Registration.Impl
         public async Task<string> RegisterMemberAsync(RegisterRequest request)
         {
             _Logger.LogInformation($"{nameof(RegisterMemberAsync)} Invoked");
+            _Logger.LogInformation($"{nameof(RegisterMemberAsync)} {request.Name}");
 
             // Check if user already exists or not.
-            bool userExists = await _UserAccess.CheckUserExistsAsync(request.Email);
+            bool userExists = await _UserAccess.CheckUserExistsAsync(request.Name);
 
             string result = "Failed";
             if (!userExists)
             {
-                result = await _UserAccess.CreateUserAsync(request.Email);
+                result = await _UserAccess.CreateUserAsync(request.Name);
             }
 
             // Do other stuff.....

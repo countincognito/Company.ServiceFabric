@@ -6,8 +6,8 @@ namespace Company.Access.User.Interface
     public interface IUserAccess
         : IService
     {
-        Task<bool> CheckUserExistsAsync(string email);
+        Task<bool> CheckUserExistsAsync(string name);
 
-        Task<string> CreateUserAsync(string email);
+        Task<string> CreateUserAsync(string name);
     }
 }

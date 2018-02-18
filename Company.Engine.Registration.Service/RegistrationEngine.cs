@@ -30,9 +30,7 @@ namespace Company.Engine.Registration.Service
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             var userAccess = AuditableProxy.ForComponent<IUserAccess>(this);
-            _Impl = AuditableWrapper.Create<IRegistrationEngine, Impl.RegistrationEngine>(
-                new Impl.RegistrationEngine(userAccess, logger),
-                logger);
+            _Impl = AuditableWrapper.Create(new Impl.RegistrationEngine(userAccess, logger), logger);
             _Logger.LogInformation("Constructed");
         }
 

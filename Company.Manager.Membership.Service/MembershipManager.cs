@@ -30,9 +30,7 @@ namespace Company.Manager.Membership.Service
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             var registrationEngine = AuditableProxy.ForComponent<IRegistrationEngine>(this);
-            _Impl = AuditableWrapper.Create<IMembershipManager, Impl.MembershipManager>(
-                new Impl.MembershipManager(registrationEngine, logger),
-                logger);
+            _Impl = AuditableWrapper.Create(new Impl.MembershipManager(registrationEngine, logger), logger);
             _Logger.LogInformation("Constructed");
         }
 
