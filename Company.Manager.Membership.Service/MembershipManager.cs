@@ -54,18 +54,19 @@ namespace Company.Manager.Membership.Service
 
         protected override Task OnCloseAsync(CancellationToken cancellationToken)
         {
-            _Logger.LogInformation($"{nameof(OnCloseAsync)} invoked");
+            _Logger.LogInformation($"{nameof(OnCloseAsync)} Invoked");
             return base.OnCloseAsync(cancellationToken);
         }
 
         protected override void OnAbort()
         {
-            _Logger.LogInformation($"{nameof(OnAbort)} invoked");
+            _Logger.LogInformation($"{nameof(OnAbort)} Invoked");
             base.OnAbort();
         }
 
         public Task<string> RegisterMemberAsync(RegisterRequest request)
         {
+            _Logger.LogInformation($"{nameof(RegisterMemberAsync)} Invoked");
             return _Impl.RegisterMemberAsync(request);
         }
     }

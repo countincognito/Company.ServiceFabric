@@ -26,6 +26,8 @@ namespace Company.ServiceFabric.Logging.Serilog
                 new PropertyEnricher(nameof(context.PartitionId), context.PartitionId.ToString()),
                 new PropertyEnricher(nameof(context.CodePackageActivationContext.ApplicationName), context.CodePackageActivationContext.ApplicationName),
                 new PropertyEnricher(nameof(context.CodePackageActivationContext.ApplicationTypeName), context.CodePackageActivationContext.ApplicationTypeName),
+                new PropertyEnricher(nameof(context.CodePackageActivationContext.CodePackageName), context.CodePackageActivationContext.CodePackageName),
+                new PropertyEnricher(nameof(context.CodePackageActivationContext.CodePackageVersion), context.CodePackageActivationContext.CodePackageVersion),
                 new PropertyEnricher(nameof(context.NodeContext.NodeName), context.NodeContext.NodeName),
                 new PropertyEnricher(nameof(context.TraceId), context.TraceId),
             };

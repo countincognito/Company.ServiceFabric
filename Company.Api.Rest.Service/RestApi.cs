@@ -99,13 +99,13 @@ namespace Company.Api.Rest.Service
 
         protected override Task OnCloseAsync(CancellationToken cancellationToken)
         {
-            _Logger.LogInformation($"{nameof(OnCloseAsync)} invoked");
+            _Logger.LogInformation($"{nameof(OnCloseAsync)} Invoked");
             return base.OnCloseAsync(cancellationToken);
         }
 
         protected override void OnAbort()
         {
-            _Logger.LogInformation($"{nameof(OnAbort)} invoked");
+            _Logger.LogInformation($"{nameof(OnAbort)} Invoked");
             base.OnAbort();
         }
     }

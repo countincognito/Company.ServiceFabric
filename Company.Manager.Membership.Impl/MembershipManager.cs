@@ -23,7 +23,7 @@ namespace Company.Manager.Membership.Impl
 
         public async Task<string> RegisterMemberAsync(RegisterRequest request)
         {
-            _Logger.LogInformation($"{nameof(RegisterMemberAsync)} invoked");
+            _Logger.LogInformation($"{nameof(RegisterMemberAsync)} Invoked");
             string result = await _RegistrationEngine.RegisterMemberAsync(request);
             return $"\r\nMembershipManager.RegisterMemberAsync -> {result}";
         }

@@ -17,13 +17,13 @@ namespace Company.Access.User.Impl
 
         public Task<bool> CheckUserExistsAsync(string email)
         {
-            _Logger.LogInformation($@"{nameof(CheckUserExistsAsync)} invoked");
+            _Logger.LogInformation($@"{nameof(CheckUserExistsAsync)} Invoked");
             return Task.FromResult(false);
         }
 
         public Task<string> CreateUserAsync(string email)
         {
-            _Logger.LogInformation($@"{nameof(CreateUserAsync)} invoked");
+            _Logger.LogInformation($@"{nameof(CreateUserAsync)} Invoked");
             return Task.FromResult($"\r\n        UserAccess.CreateUserAsync -> {email} -> {DateTime.UtcNow}");
         }
     }
