@@ -23,6 +23,14 @@ namespace Company.ServiceFabric.Client
             disposable?.Dispose();
         }
 
+        internal IServiceRemotingClient InnerClient
+        {
+            get
+            {
+                return _InnerClient;
+            }
+        }
+
         public string ListenerName
         {
             get

@@ -64,7 +64,6 @@ namespace Company.Manager.Membership.Service
 
         public Task<string> RegisterMemberAsync(RegisterRequest request)
         {
-            _Logger.LogInformation($"{nameof(RegisterMemberAsync)} Invoked");
             return _Impl.RegisterMemberAsync(request);
         }
     }

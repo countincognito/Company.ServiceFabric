@@ -85,7 +85,10 @@ namespace Company.ServiceFabric.Client
             CancellationToken cancellationToken)
         {
             return _InnerClientFactory.ReportOperationExceptionAsync(
-                client,
+                // This expects a an object of type FabricTransportServiceRemotingClient, hence
+                // why we need to expose the InnerClient here.
+                // https://github.com/Azure/service-fabric-services-and-actors-dotnet/issues/43
+                ((AuditableFabricTransportServiceRemotingClient)client).InnerClient,
                 exceptionInformation,
                 retrySettings,
                 cancellationToken);
