@@ -9,6 +9,15 @@ namespace Test.Client.Membership
 {
     public class Client
     {
+        public static void Test()
+        {
+            Test_QueryMembershipConcurrent();
+            Test_QueryMembershipSequential().Wait();
+            //Test_QueryMembershipSequentialInfinite().Wait();
+
+            Console.ReadKey();
+        }
+
         static void Test_QueryMembershipConcurrent()
         {
             try
@@ -58,20 +67,35 @@ namespace Test.Client.Membership
             }
         }
 
-        public static void Test()
+        static async Task Test_QueryMembershipSequentialInfinite()
         {
-            Test_QueryMembershipConcurrent();
-            Test_QueryMembershipSequential().Wait();
+            try
+            {
+                Console.WriteLine("\r\nInfinite...");
 
-            Console.ReadKey();
+                var proxy = GetProxy();
+                ConsoleKeyInfo? input = null;
+                while (!input.HasValue)
+                {
+                    string response = await proxy.RegisterMemberAsync(GetRegisterRequest(Guid.NewGuid().ToString()));
+                    Console.WriteLine(response);
+                    Task.Factory.StartNew(() => input = Console.ReadKey()).Wait(TimeSpan.FromSeconds(0.5));
+                }
+
+                Console.WriteLine("\r\nFinished...");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Test Exception: " + ex.Message);
+            }
         }
 
-        public static IMembershipManager GetProxy()
+        static IMembershipManager GetProxy()
         {
             return AuditableProxy.ForMicroservice<IMembershipManager>();
         }
 
-        public static RegisterRequest GetRegisterRequest(string name)
+        static RegisterRequest GetRegisterRequest(string name)
         {
             return new RegisterRequest
             {
