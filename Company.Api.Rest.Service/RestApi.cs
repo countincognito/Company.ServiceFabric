@@ -1,4 +1,7 @@
-﻿using Company.Api.Rest.Interface;
+﻿using Company.Api.Rest.Impl;
+using Company.Api.Rest.Interface;
+using Company.Manager.Membership.Interface;
+using Company.ServiceFabric.Client;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -65,6 +68,8 @@ namespace Company.Api.Rest.Service
                             })
                             .ConfigureServices(
                                 services => services
+                                    .AddTransient(typeof(IMembershipManager), _ => AuditableProxy.ForMicroservice<IMembershipManager>())
+                                    .AddSingleton(typeof(ILogger<IRestApi>), _Logger)
                                     .AddSingleton(serviceContext))
                             .UseContentRoot(Directory.GetCurrentDirectory())
                             .UseStartup<Startup>()

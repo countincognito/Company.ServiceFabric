@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace Company.Api.Rest.Service
+namespace Company.Api.Rest.Impl
 {
     public class Startup
     {

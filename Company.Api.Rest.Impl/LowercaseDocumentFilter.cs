@@ -2,7 +2,7 @@
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 
-namespace Company.Api.Rest.Service
+namespace Company.Api.Rest.Impl
 {
     public class LowercaseDocumentFilter
         : IDocumentFilter

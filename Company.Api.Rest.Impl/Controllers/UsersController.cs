@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Company.Api.Rest.Data;
+using Company.Api.Rest.Interface;
 using Company.Common.Data;
 using Company.Manager.Membership.Interface;
-using Company.ServiceFabric.Client;
+using Company.Utility.Audit;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -15,15 +17,26 @@ namespace Company.Api.Rest.Service
         : Controller
     {
         private readonly IMapper _Mapper;
+        private readonly IMembershipManager _MembershipManager;
+        private readonly ILogger<IRestApi> _Logger;
 
-        public UsersController(IMapper mapper)
+        public UsersController(
+            IMapper mapper,
+            IMembershipManager membershipManager,
+            ILogger<IRestApi> logger)
         {
             _Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _MembershipManager = membershipManager ?? throw new ArgumentNullException(nameof(membershipManager));
+            _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            // Just in case we decide to go InProc.
+            AuditContext.NewCurrentIfEmpty();
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Post([FromBody]RegisterRequestDto requestDto)
         {
+            _Logger.LogInformation($"{nameof(Post)} Invoked");
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -31,8 +44,7 @@ namespace Company.Api.Rest.Service
             try
             {
                 var request = _Mapper.Map<RegisterRequest>(requestDto);
-                IMembershipManager proxy = AuditableProxy.ForMicroservice<IMembershipManager>();
-                string result = await proxy.RegisterMemberAsync(request);
+                string result = await _MembershipManager.RegisterMemberAsync(request);
                 if (!string.IsNullOrWhiteSpace(result))
                 {
                     return Ok(result);
@@ -40,7 +52,7 @@ namespace Company.Api.Rest.Service
             }
             catch (Exception e)
             {
-                ServiceEventSource.Current.ServiceHostInitializationFailed(e.ToString());
+                _Logger.LogError(e.ToString());
             }
             return BadRequest(HttpStatusCode.BadRequest);
         }

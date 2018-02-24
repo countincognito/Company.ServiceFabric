@@ -2,7 +2,7 @@
 using Company.Api.Rest.Data;
 using Company.Common.Data;
 
-namespace Company.Api.Rest.Service
+namespace Company.Api.Rest.Impl
 {
     public class RestProfile
         : Profile
