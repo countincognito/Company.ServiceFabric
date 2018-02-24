@@ -1,5 +1,8 @@
 ﻿using Serilog.Core;
 using Serilog.Events;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Company.Utility.Audit
 {
@@ -24,6 +27,11 @@ namespace Company.Utility.Audit
             {
                 logEvent.AddPropertyIfAbsent(new LogEventProperty(CallChainIdPropertyName, new ScalarValue(context.CallChainId)));
                 logEvent.AddPropertyIfAbsent(new LogEventProperty(OriginatorUtcTimestampPropertyName, new ScalarValue(context.OriginatorUtcTimestamp)));
+
+                foreach (KeyValuePair<string, string> kvp in context.ExtraHeaders.OrderBy(x => x.Key, StringComparer.Ordinal))
+                {
+                    logEvent.AddPropertyIfAbsent(new LogEventProperty(kvp.Key, new ScalarValue(kvp.Value)));
+                }
             }
         }
     }

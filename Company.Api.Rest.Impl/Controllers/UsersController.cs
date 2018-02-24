@@ -7,6 +7,7 @@ using Company.Utility.Audit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -31,6 +32,9 @@ namespace Company.Api.Rest.Service
 
             // Just in case we decide to go InProc.
             AuditContext.NewCurrentIfEmpty();
+
+            Debug.Assert(AuditContext.Current != null);
+            AuditContext.Current.AddExtraHeader("Jurisdiction", "UK");
         }
 
         [HttpPost("register")]

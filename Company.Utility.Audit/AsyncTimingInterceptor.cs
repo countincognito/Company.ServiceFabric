@@ -10,6 +10,11 @@ namespace Company.Utility.Audit
     {
         private readonly ILogger<T> _Logger;
 
+        static AsyncTimingInterceptor()
+        {
+            Debug.Assert(typeof(T).IsInterface);
+        }
+
         public AsyncTimingInterceptor(ILogger<T> logger)
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));

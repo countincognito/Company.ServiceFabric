@@ -1,5 +1,6 @@
 ﻿using Castle.DynamicProxy;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace Company.Utility.Audit
 {
@@ -9,6 +10,7 @@ namespace Company.Utility.Audit
 
         public static I Create<I, T>(T instance, ILogger<I> logger) where T : class, I where I : class
         {
+            Debug.Assert(typeof(I).IsInterface);
             AuditContext.ClearCurrent();
             return _ProxyGenerator.CreateInterfaceProxyWithTargetInterface<I>(
                 instance,
