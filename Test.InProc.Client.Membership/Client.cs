@@ -88,14 +88,14 @@ namespace Test.InProc.Membership
 
         public static IMembershipManager GetProxy(ILogger serilog)
         {
-            var userAccessLogger = serilog.ToGeneric<IUserAccess>();
-            var userAccess = AuditableWrapper.Create(new UserAccess(userAccessLogger), userAccessLogger);
+            var userAccessLogger = serilog.ToGeneric<UserAccess>();
+            var userAccess = AuditableWrapper.Create<IUserAccess>(new UserAccess(userAccessLogger), userAccessLogger);
 
-            var registrationEngineLogger = serilog.ToGeneric<IRegistrationEngine>();
-            var registrationEngine = AuditableWrapper.Create(new RegistrationEngine(userAccess, registrationEngineLogger), registrationEngineLogger);
+            var registrationEngineLogger = serilog.ToGeneric<RegistrationEngine>();
+            var registrationEngine = AuditableWrapper.Create<IRegistrationEngine>(new RegistrationEngine(userAccess, registrationEngineLogger), registrationEngineLogger);
 
-            var membershipManagerLogger = serilog.ToGeneric<IMembershipManager>();
-            var membershipManager = AuditableWrapper.Create(new MembershipManager(registrationEngine, membershipManagerLogger), membershipManagerLogger);
+            var membershipManagerLogger = serilog.ToGeneric<MembershipManager>();
+            var membershipManager = AuditableWrapper.Create<IMembershipManager>(new MembershipManager(registrationEngine, membershipManagerLogger), membershipManagerLogger);
 
             return membershipManager;
         }
