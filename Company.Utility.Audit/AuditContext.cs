@@ -18,9 +18,9 @@ namespace Company.Utility.Audit
             DateTime originatorUtcTimestamp,
             IDictionary<string, string> extraHeaders)
         {
+            _ExtraHeaders = extraHeaders ?? throw new ArgumentNullException(nameof(extraHeaders));
             CallChainId = callChainId;
             OriginatorUtcTimestamp = originatorUtcTimestamp;
-            _ExtraHeaders = extraHeaders ?? throw new ArgumentNullException(nameof(extraHeaders));
             ExtraHeaders = new ReadOnlyDictionary<string, string>(_ExtraHeaders);
         }
 
