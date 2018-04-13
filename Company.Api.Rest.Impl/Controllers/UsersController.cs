@@ -31,9 +31,9 @@ namespace Company.Api.Rest.Service
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             // Just in case we decide to go InProc.
-            TrackingContext.NewCurrentIfEmpty(new Dictionary<string, string>() { { "Jurisdiction", "UK" } });
+            TrackingContext tc = TrackingContext.NewCurrentIfEmpty(new Dictionary<string, string>() { { "Jurisdiction", "UK" } });
 
-            Debug.Assert(TrackingContext.Current != null);
+            Debug.Assert(tc != null);
         }
 
         [HttpPost("register")]

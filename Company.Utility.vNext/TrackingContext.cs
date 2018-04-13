@@ -63,12 +63,12 @@ namespace Company.Utility
             get;
         }
 
-        public static void NewCurrentIfEmpty()
+        public static TrackingContext NewCurrentIfEmpty()
         {
-            NewCurrentIfEmpty(new Dictionary<string, string>());
+            return NewCurrentIfEmpty(new Dictionary<string, string>());
         }
 
-        public static void NewCurrentIfEmpty(IDictionary<string, string> headers)
+        public static TrackingContext NewCurrentIfEmpty(IDictionary<string, string> headers)
         {
             if (headers == null)
             {
@@ -76,11 +76,12 @@ namespace Company.Utility
             }
             lock (m_Lock)
             {
-                TrackingContext context = Current;
-                if (context == null)
+                TrackingContext tc = Current;
+                if (tc == null)
                 {
-                    NewCurrent(headers);
+                    return NewCurrent(headers);
                 }
+                return tc;
             }
         }
 
@@ -127,15 +128,15 @@ namespace Company.Utility
         /// <summary>
         /// Dangerous! Use with caution.
         /// </summary>
-        public static void NewCurrent()
+        public static TrackingContext NewCurrent()
         {
-            NewCurrent(new Dictionary<string, string>());
+            return NewCurrent(new Dictionary<string, string>());
         }
 
         /// <summary>
         /// Dangerous! Use with caution.
         /// </summary>
-        public static void NewCurrent(IDictionary<string, string> headers)
+        public static TrackingContext NewCurrent(IDictionary<string, string> headers)
         {
             if (headers == null)
             {
@@ -144,7 +145,9 @@ namespace Company.Utility
             lock (m_Lock)
             {
                 ClearCurrent();
-                Current = Create(headers);
+                TrackingContext tc = Create(headers);
+                Current = tc;
+                return tc;
             }
         }
 

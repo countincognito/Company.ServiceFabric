@@ -31,9 +31,8 @@ namespace Company.ServiceFabric.Common
             else
             {
                 // If no tracking context exists then create one.
-                TrackingContext.NewCurrentIfEmpty();
-
-                TrackingContext tc = TrackingContext.Current;
+                TrackingContext tc = TrackingContext.NewCurrentIfEmpty();
+                
                 Debug.Assert(tc != null);
 
                 // Copy the tracking context to the message header.
@@ -68,9 +67,8 @@ namespace Company.ServiceFabric.Common
             else
             {
                 // If no tracking context exists then create one.
-                TrackingContext.NewCurrentIfEmpty();
-
-                TrackingContext tc = TrackingContext.Current;
+                TrackingContext tc = TrackingContext.NewCurrentIfEmpty();
+                
                 Debug.Assert(tc != null);
 
                 // Copy the tracking context to the message header.
