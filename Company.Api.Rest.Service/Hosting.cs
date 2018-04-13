@@ -1,6 +1,5 @@
 ﻿using Company.ServiceFabric.Common;
 using Company.ServiceFabric.Logging.Serilog;
-using Company.Utility.Audit;
 using Company.Utility.Logging.Serilog;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Serilog;
@@ -21,12 +20,13 @@ namespace Company.Api.Rest.Service
                 {
                     ConfigurationPackage configPackage = context.CodePackageActivationContext.GetConfigurationPackageObject(@"Config");
                     ILogger serilog = new LoggerConfiguration()
-                        .Enrich.WithServiceContext(context)
-                        .Enrich.WithAuditContext()
+                        .Enrich.FromServiceContext(context)
+                        .Enrich.FromTrackingContext()
+                        .Enrich.FromLoggingProxy()
                         .WriteTo.Seq(configPackage.Settings.Sections[@"ResourceSettings"].Parameters[@"seqLocation"].Value)
                         .CreateLogger();
                     Log.Logger = serilog;
-                    return new RestApi(context, serilog.ToGeneric<RestApi>());
+                    return new RestApi(context, serilog);
                 })
                 .GetAwaiter().GetResult();
 

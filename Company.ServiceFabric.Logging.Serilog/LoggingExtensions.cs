@@ -8,7 +8,7 @@ namespace Company.ServiceFabric.Logging.Serilog
 {
     public static class LoggingExtensions
     {
-        public static LoggerConfiguration WithServiceContext(this LoggerEnrichmentConfiguration enrichmentConfiguration, ServiceContext context)
+        public static LoggerConfiguration FromServiceContext(this LoggerEnrichmentConfiguration enrichmentConfiguration, ServiceContext context)
         {
             if (enrichmentConfiguration == null)
             {

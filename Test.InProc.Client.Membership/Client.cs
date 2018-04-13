@@ -5,7 +5,7 @@ using Company.Engine.Registration.Impl;
 using Company.Engine.Registration.Interface;
 using Company.Manager.Membership.Impl;
 using Company.Manager.Membership.Interface;
-using Company.Utility.Audit;
+using Company.Utility;
 using Company.Utility.Logging.Serilog;
 using Serilog;
 using System;
@@ -27,9 +27,9 @@ namespace Test.InProc.Membership
                 for (int i = 0; i < 10; i++)
                 {
                     // THIS IS NECESSARY FOR INPROC CALLS.
-                    AuditContext.NewCurrent();
+                    TrackingContext.NewCurrent();
 
-                    Task<string> response = proxy.RegisterMemberAsync(GetRegisterRequest(AuditContext.Current.CallChainId.ToString()));
+                    Task<string> response = proxy.RegisterMemberAsync(GetRegisterRequest(TrackingContext.Current.CallChainId.ToString()));
                     tasks.Add(response);
                 }
                 Task.WaitAll(tasks.ToArray());
@@ -57,9 +57,9 @@ namespace Test.InProc.Membership
                 for (int i = 0; i < 10; i++)
                 {
                     // THIS IS NECESSARY FOR INPROC CALLS.
-                    AuditContext.NewCurrent();
+                    TrackingContext.NewCurrent();
 
-                    string response = await proxy.RegisterMemberAsync(GetRegisterRequest(AuditContext.Current.CallChainId.ToString()));
+                    string response = await proxy.RegisterMemberAsync(GetRegisterRequest(TrackingContext.Current.CallChainId.ToString()));
                     Console.WriteLine(response);
                 }
 
@@ -74,7 +74,8 @@ namespace Test.InProc.Membership
         public static void Test()
         {
             ILogger serilog = new LoggerConfiguration()
-                .Enrich.WithAuditContext()
+                .Enrich.FromTrackingContext()
+                .Enrich.FromLoggingProxy()
                 .WriteTo.Seq("http://localhost:5341")
                 .CreateLogger();
             Log.Logger = serilog;
@@ -88,15 +89,9 @@ namespace Test.InProc.Membership
 
         public static IMembershipManager GetProxy(ILogger serilog)
         {
-            var userAccessLogger = serilog.ToGeneric<UserAccess>();
-            var userAccess = AuditableWrapper.Create<IUserAccess>(new UserAccess(userAccessLogger), userAccessLogger);
-
-            var registrationEngineLogger = serilog.ToGeneric<RegistrationEngine>();
-            var registrationEngine = AuditableWrapper.Create<IRegistrationEngine>(new RegistrationEngine(userAccess, registrationEngineLogger), registrationEngineLogger);
-
-            var membershipManagerLogger = serilog.ToGeneric<MembershipManager>();
-            var membershipManager = AuditableWrapper.Create<IMembershipManager>(new MembershipManager(registrationEngine, membershipManagerLogger), membershipManagerLogger);
-
+            var userAccess = LoggingProxy.Create<IUserAccess>(new UserAccess(serilog), serilog);
+            var registrationEngine = LoggingProxy.Create<IRegistrationEngine>(new RegistrationEngine(userAccess, serilog), serilog);
+            var membershipManager = LoggingProxy.Create<IMembershipManager>(new MembershipManager(registrationEngine, serilog), serilog);
             return membershipManager;
         }
 

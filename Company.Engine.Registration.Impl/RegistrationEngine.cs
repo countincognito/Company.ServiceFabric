@@ -1,7 +1,7 @@
 ﻿using Company.Access.User.Interface;
 using Company.Common.Data;
 using Company.Engine.Registration.Interface;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Threading.Tasks;
 
@@ -11,11 +11,11 @@ namespace Company.Engine.Registration.Impl
         : IRegistrationEngine
     {
         private readonly IUserAccess _UserAccess;
-        private readonly ILogger<IRegistrationEngine> _Logger;
+        private readonly ILogger _Logger;
 
         public RegistrationEngine(
             IUserAccess userAccess,
-            ILogger<IRegistrationEngine> logger)
+            ILogger logger)
         {
             _UserAccess = userAccess ?? throw new ArgumentNullException(nameof(userAccess));
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -23,8 +23,8 @@ namespace Company.Engine.Registration.Impl
 
         public async Task<string> RegisterMemberAsync(RegisterRequest request)
         {
-            _Logger.LogInformation($"{nameof(RegisterMemberAsync)} Invoked");
-            _Logger.LogInformation($"{nameof(RegisterMemberAsync)} {request.Name}");
+            _Logger.Information($"{nameof(RegisterMemberAsync)} Invoked");
+            _Logger.Information($"{nameof(RegisterMemberAsync)} {request.Name}");
 
             // Check if user already exists or not.
             bool userExists = await _UserAccess.CheckUserExistsAsync(request.Name);

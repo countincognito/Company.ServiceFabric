@@ -4,10 +4,10 @@ using Company.Manager.Membership.Interface;
 using Company.ServiceFabric.Client;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Communication.AspNetCore;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Fabric;
@@ -25,18 +25,18 @@ namespace Company.Api.Rest.Service
     internal sealed class RestApi
         : StatelessService, IRestApi
     {
-        private readonly ILogger<IRestApi> _Logger;
+        private readonly ILogger _Logger;
         private readonly string _ApiCertThumbprint;
 
         public RestApi(
             StatelessServiceContext context,
-            ILogger<IRestApi> logger)
+            ILogger logger)
             : base(context)
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             ConfigurationPackage configPackage = Context.CodePackageActivationContext.GetConfigurationPackageObject(@"Config");
             _ApiCertThumbprint = configPackage.Settings.Sections[@"ResourceSettings"].Parameters[@"apiCertThumbprint"].Value;
-            _Logger.LogInformation("Constructed");
+            _Logger.Information("Constructed");
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace Company.Api.Rest.Service
                             })
                             .ConfigureServices(
                                 services => services
-                                    .AddTransient(typeof(IMembershipManager), _ => AuditableProxy.ForMicroservice<IMembershipManager>())
-                                    .AddSingleton(typeof(ILogger<IRestApi>), _Logger)
+                                    .AddTransient(typeof(IMembershipManager), _ => TrackingProxy.ForMicroservice<IMembershipManager>())
+                                    .AddSingleton(typeof(ILogger), _Logger)
                                     .AddSingleton(serviceContext))
                             .UseContentRoot(Directory.GetCurrentDirectory())
                             .UseStartup<Startup>()
@@ -104,13 +104,13 @@ namespace Company.Api.Rest.Service
 
         protected override Task OnCloseAsync(CancellationToken cancellationToken)
         {
-            _Logger.LogInformation($"{nameof(OnCloseAsync)} Invoked");
+            _Logger.Information($"{nameof(OnCloseAsync)} Invoked");
             return base.OnCloseAsync(cancellationToken);
         }
 
         protected override void OnAbort()
         {
-            _Logger.LogInformation($"{nameof(OnAbort)} Invoked");
+            _Logger.Information($"{nameof(OnAbort)} Invoked");
             base.OnAbort();
         }
     }

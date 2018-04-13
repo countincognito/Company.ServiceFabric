@@ -1,7 +1,7 @@
 ﻿using Company.Common.Data;
 using Company.Engine.Registration.Interface;
 using Company.Manager.Membership.Interface;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Threading.Tasks;
 
@@ -11,11 +11,11 @@ namespace Company.Manager.Membership.Impl
         : IMembershipManager
     {
         private readonly IRegistrationEngine _RegistrationEngine;
-        private readonly ILogger<IMembershipManager> _Logger;
+        private readonly ILogger _Logger;
 
         public MembershipManager(
             IRegistrationEngine registrationEngine,
-            ILogger<IMembershipManager> logger)
+            ILogger logger)
         {
             _RegistrationEngine = registrationEngine ?? throw new ArgumentNullException(nameof(registrationEngine));
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -23,8 +23,8 @@ namespace Company.Manager.Membership.Impl
 
         public async Task<string> RegisterMemberAsync(RegisterRequest request)
         {
-            _Logger.LogInformation($"{nameof(RegisterMemberAsync)} Invoked");
-            _Logger.LogInformation($"{nameof(RegisterMemberAsync)} {request.Name}");
+            _Logger.Information($"{nameof(RegisterMemberAsync)} Invoked");
+            _Logger.Information($"{nameof(RegisterMemberAsync)} {request.Name}");
             string result = await _RegistrationEngine.RegisterMemberAsync(request);
             return $"\r\nMembershipManager.RegisterMemberAsync -> {result}";
         }

@@ -1,18 +1,27 @@
 ﻿using Serilog;
+using Serilog.Configuration;
 using System;
 
 namespace Company.Utility.Logging.Serilog
 {
     public static class LoggingExtensions
     {
-        public static Microsoft.Extensions.Logging.ILogger<T> ToGeneric<T>(this ILogger logger)
+        public static LoggerConfiguration FromTrackingContext(this LoggerEnrichmentConfiguration enrichmentConfiguration)
         {
-            if (logger == null)
+            if (enrichmentConfiguration == null)
             {
-                throw new ArgumentNullException(nameof(logger));
+                throw new ArgumentNullException(nameof(enrichmentConfiguration));
             }
-            return Microsoft.Extensions.Logging.LoggerFactoryExtensions.CreateLogger<T>(
-                new Microsoft.Extensions.Logging.LoggerFactory().AddSerilog(logger));
+            return enrichmentConfiguration.With<TrackingContextEnricher>();
+        }
+
+        public static LoggerConfiguration FromLoggingProxy(this LoggerEnrichmentConfiguration enrichmentConfiguration)
+        {
+            if (enrichmentConfiguration == null)
+            {
+                throw new ArgumentNullException(nameof(enrichmentConfiguration));
+            }
+            return enrichmentConfiguration.FromLogContext();
         }
     }
 }

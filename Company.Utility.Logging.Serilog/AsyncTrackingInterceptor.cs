@@ -1,13 +1,13 @@
 ﻿using Castle.DynamicProxy;
 
-namespace Company.Utility.Audit
+namespace Company.Utility.Logging.Serilog
 {
-    public class AsyncAuditableInterceptor
+    public class AsyncTrackingInterceptor
         : ProcessingAsyncInterceptor<object>
     {
         protected override object StartingInvocation(IInvocation invocation)
         {
-            AuditContext.NewCurrentIfEmpty();
+            TrackingContext.NewCurrentIfEmpty();
             return base.StartingInvocation(invocation);
         }
     }

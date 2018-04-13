@@ -3,12 +3,12 @@ using Company.Common.Data;
 using Company.Engine.Registration.Interface;
 using Company.ServiceFabric.Client;
 using Company.ServiceFabric.Server;
-using Company.Utility.Audit;
-using Microsoft.Extensions.Logging;
+using Company.Utility.Logging.Serilog;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.FabricTransport.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Fabric;
@@ -21,17 +21,17 @@ namespace Company.Engine.Registration.Service
         : StatelessService, IRegistrationEngine
     {
         private IRegistrationEngine _Impl;
-        private readonly ILogger<IRegistrationEngine> _Logger;
+        private readonly ILogger _Logger;
 
         public RegistrationEngine(
             StatelessServiceContext context,
-            ILogger<IRegistrationEngine> logger)
+            ILogger logger)
             : base(context)
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            var userAccess = AuditableProxy.ForComponent<IUserAccess>(this);
-            _Impl = AuditableWrapper.Create(new Impl.RegistrationEngine(userAccess, logger), logger);
-            _Logger.LogInformation("Constructed");
+            var userAccess = TrackingProxy.ForComponent<IUserAccess>(this);
+            _Impl = LoggingProxy.Create<IRegistrationEngine>(new Impl.RegistrationEngine(userAccess, logger), logger);
+            _Logger.Information("Constructed");
         }
 
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
@@ -41,7 +41,7 @@ namespace Company.Engine.Registration.Service
                 new ServiceInstanceListener(
                     (context) => new FabricTransportServiceRemotingListener(
                         context,
-                        new AuditableServiceRemotingDispatcher(context, this),
+                        new TrackingServiceRemotingDispatcher(context, this),
                         new FabricTransportRemotingListenerSettings
                         {
                             EndpointResourceName = typeof(IRegistrationEngine).Name
@@ -52,13 +52,13 @@ namespace Company.Engine.Registration.Service
 
         protected override Task OnCloseAsync(CancellationToken cancellationToken)
         {
-            _Logger.LogInformation($"{nameof(OnCloseAsync)} Invoked");
+            _Logger.Information($"{nameof(OnCloseAsync)} Invoked");
             return base.OnCloseAsync(cancellationToken);
         }
 
         protected override void OnAbort()
         {
-            _Logger.LogInformation($"{nameof(OnAbort)} Invoked");
+            _Logger.Information($"{nameof(OnAbort)} Invoked");
             base.OnAbort();
         }
 

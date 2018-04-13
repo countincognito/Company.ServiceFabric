@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Company.ServiceFabric.Server
 {
-    public class AuditableServiceRemotingDispatcher
+    public class TrackingServiceRemotingDispatcher
         : ServiceRemotingMessageDispatcher
     {
-        public AuditableServiceRemotingDispatcher(ServiceContext serviceContext, IService service) :
+        public TrackingServiceRemotingDispatcher(ServiceContext serviceContext, IService service) :
             base(serviceContext, service)
         {
         }
@@ -21,9 +21,9 @@ namespace Company.ServiceFabric.Server
             IServiceRemotingRequestMessage requestMessage)
         {
             IServiceRemotingResponseMessage responseMessage =
-                await base.HandleRequestResponseAsync(requestContext, AuditHelper.ProcessRequest(requestMessage));
+                await base.HandleRequestResponseAsync(requestContext, TrackingHelper.ProcessRequest(requestMessage));
 
-            return AuditHelper.ProcessResponse(responseMessage);
+            return TrackingHelper.ProcessResponse(responseMessage);
         }
 
         public override Task<IServiceRemotingResponseMessageBody> HandleRequestResponseAsync(
@@ -36,7 +36,7 @@ namespace Company.ServiceFabric.Server
 
         public override void HandleOneWayMessage(IServiceRemotingRequestMessage requestMessage)
         {
-            base.HandleOneWayMessage(AuditHelper.ProcessRequest(requestMessage));
+            base.HandleOneWayMessage(TrackingHelper.ProcessRequest(requestMessage));
         }
     }
 }

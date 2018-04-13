@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Company.Api.Rest.Data;
-using Company.Api.Rest.Interface;
 using Company.Common.Data;
 using Company.Manager.Membership.Interface;
-using Company.Utility.Audit;
+using Company.Utility;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
@@ -19,28 +19,27 @@ namespace Company.Api.Rest.Service
     {
         private readonly IMapper _Mapper;
         private readonly IMembershipManager _MembershipManager;
-        private readonly ILogger<IRestApi> _Logger;
+        private readonly ILogger _Logger;
 
         public UsersController(
             IMapper mapper,
             IMembershipManager membershipManager,
-            ILogger<IRestApi> logger)
+            ILogger logger)
         {
             _Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _MembershipManager = membershipManager ?? throw new ArgumentNullException(nameof(membershipManager));
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             // Just in case we decide to go InProc.
-            AuditContext.NewCurrentIfEmpty();
+            TrackingContext.NewCurrentIfEmpty(new Dictionary<string, string>() { { "Jurisdiction", "UK" } });
 
-            Debug.Assert(AuditContext.Current != null);
-            AuditContext.Current.AddExtraHeader("Jurisdiction", "UK");
+            Debug.Assert(TrackingContext.Current != null);
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Post([FromBody]RegisterRequestDto requestDto)
         {
-            _Logger.LogInformation($"{nameof(Post)} Invoked");
+            _Logger.Information($"{nameof(Post)} Invoked");
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -56,7 +55,7 @@ namespace Company.Api.Rest.Service
             }
             catch (Exception e)
             {
-                _Logger.LogError(e.ToString());
+                _Logger.Error(e.ToString());
             }
             return BadRequest(HttpStatusCode.BadRequest);
         }

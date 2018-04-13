@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace Company.ServiceFabric.Client
 {
-    public class AuditableFabricTransportServiceRemotingClient
+    public class TrackingFabricTransportServiceRemotingClient
       : IServiceRemotingClient
     {
         private readonly IServiceRemotingClient _InnerClient;
 
-        public AuditableFabricTransportServiceRemotingClient(IServiceRemotingClient innerClient)
+        public TrackingFabricTransportServiceRemotingClient(IServiceRemotingClient innerClient)
         {
             _InnerClient = innerClient ?? throw new ArgumentNullException(nameof(innerClient));
         }
 
-        ~AuditableFabricTransportServiceRemotingClient()
+        ~TrackingFabricTransportServiceRemotingClient()
         {
             var disposable = _InnerClient as IDisposable;
             disposable?.Dispose();
@@ -69,13 +69,13 @@ namespace Company.ServiceFabric.Client
 
         public async Task<IServiceRemotingResponseMessage> RequestResponseAsync(IServiceRemotingRequestMessage requestMessage)
         {
-            IServiceRemotingResponseMessage responseMessage = await _InnerClient.RequestResponseAsync(AuditHelper.ProcessRequest(requestMessage));
-            return AuditHelper.ProcessResponse(responseMessage);
+            IServiceRemotingResponseMessage responseMessage = await _InnerClient.RequestResponseAsync(TrackingHelper.ProcessRequest(requestMessage));
+            return TrackingHelper.ProcessResponse(responseMessage);
         }
 
         public void SendOneWay(IServiceRemotingRequestMessage requestMessage)
         {
-            _InnerClient.SendOneWay(AuditHelper.ProcessRequest(requestMessage));
+            _InnerClient.SendOneWay(TrackingHelper.ProcessRequest(requestMessage));
         }
     }
 }

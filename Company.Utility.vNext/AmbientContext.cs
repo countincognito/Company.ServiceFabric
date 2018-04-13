@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 using System.Text;
 using System.Threading;
 
-namespace Company.Utility.Audit
+namespace Company.Utility
 {
     /// <summary>
     /// Provides a way to set contextual data that flows with the call and 

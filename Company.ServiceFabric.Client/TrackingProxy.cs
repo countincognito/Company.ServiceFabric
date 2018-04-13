@@ -7,24 +7,24 @@ using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace Company.ServiceFabric.Client
 {
-    public class AuditableProxy
+    public class TrackingProxy
     {
-        private static readonly IServiceProxyFactory _AuditableProxyFactory =
-            new ServiceProxyFactory(handler => new AuditableFabricTransportServiceRemotingClientFactory(new FabricTransportServiceRemotingClientFactory()));
+        private static readonly IServiceProxyFactory _TrackingProxyFactory =
+            new ServiceProxyFactory(handler => new TrackingFabricTransportServiceRemotingClientFactory(new FabricTransportServiceRemotingClientFactory()));
 
         public static I ForMicroservice<I>(ServicePartitionKey partitionKey = null) where I : class, IService
         {
-            return Proxy.ForMicroservice<I>(_AuditableProxyFactory, partitionKey);
+            return Proxy.ForMicroservice<I>(_TrackingProxyFactory, partitionKey);
         }
 
         public static I ForComponent<I>(StatelessService caller, ServicePartitionKey partitionKey = null) where I : class, IService
         {
-            return Proxy.ForService<I>(_AuditableProxyFactory, Addressing.Component<I>(caller), partitionKey);
+            return Proxy.ForService<I>(_TrackingProxyFactory, Addressing.Component<I>(caller), partitionKey);
         }
 
         public static I ForComponent<I>(StatefulService caller, ServicePartitionKey partitionKey = null) where I : class, IService
         {
-            return Proxy.ForService<I>(_AuditableProxyFactory, Addressing.Component<I>(caller), partitionKey);
+            return Proxy.ForService<I>(_TrackingProxyFactory, Addressing.Component<I>(caller), partitionKey);
         }
     }
 }

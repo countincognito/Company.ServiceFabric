@@ -1,12 +1,10 @@
 ﻿using Company.Access.User.Impl;
 using Company.Access.User.Interface;
 using Company.Api.Rest.Impl;
-using Company.Api.Rest.Interface;
 using Company.Engine.Registration.Impl;
 using Company.Engine.Registration.Interface;
 using Company.Manager.Membership.Impl;
 using Company.Manager.Membership.Interface;
-using Company.Utility.Audit;
 using Company.Utility.Logging.Serilog;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +19,8 @@ namespace Test.InProc.RestApi
         public static void Test()
         {
             ILogger serilog = new LoggerConfiguration()
-                .Enrich.WithAuditContext()
+                .Enrich.FromTrackingContext()
+                .Enrich.FromLoggingProxy()
                 .WriteTo.Seq("http://localhost:5341")
                 .CreateLogger();
             Log.Logger = serilog;
@@ -39,16 +38,11 @@ namespace Test.InProc.RestApi
 
             //var membershipManager = new MembershipManager(registrationEngine, new NullLogger<IMembershipManager>());
 
-            var userAccessLogger = serilog.ToGeneric<UserAccess>();
-            var userAccess = AuditableWrapper.Create<IUserAccess>(new UserAccess(userAccessLogger), userAccessLogger);
+            var userAccess = LoggingProxy.Create<IUserAccess>(new UserAccess(serilog), serilog);
+            var registrationEngine = LoggingProxy.Create<IRegistrationEngine>(new RegistrationEngine(userAccess, serilog), serilog);
+            var membershipManager = LoggingProxy.Create<IMembershipManager>(new MembershipManager(registrationEngine, serilog), serilog);
 
-            var registrationEngineLogger = serilog.ToGeneric<RegistrationEngine>();
-            var registrationEngine = AuditableWrapper.Create<IRegistrationEngine>(new RegistrationEngine(userAccess, registrationEngineLogger), registrationEngineLogger);
-
-            var membershipManagerLogger = serilog.ToGeneric<MembershipManager>();
-            var membershipManager = AuditableWrapper.Create<IMembershipManager>(new MembershipManager(registrationEngine, membershipManagerLogger), membershipManagerLogger);
-
-            var restApiLogger = serilog.ToGeneric<IRestApi>();
+            var restApiLogger = serilog;
 
             return new WebHostBuilder()
                 .UseKestrel(options =>

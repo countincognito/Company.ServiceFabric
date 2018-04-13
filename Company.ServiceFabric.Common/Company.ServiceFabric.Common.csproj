@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ServiceFabric.Actors" Version="3.0.467" />
+    <PackageReference Include="Microsoft.ServiceFabric.Actors" Version="3.0.480" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Company.Utility.Audit\Company.Utility.Audit.csproj" />
+    <ProjectReference Include="..\Company.Utility.vNext\Company.Utility.vNext.csproj" />
   </ItemGroup>
 
 </Project>

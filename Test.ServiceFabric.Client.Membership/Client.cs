@@ -92,7 +92,7 @@ namespace Test.Client.Membership
 
         static IMembershipManager GetProxy()
         {
-            return AuditableProxy.ForMicroservice<IMembershipManager>();
+            return TrackingProxy.ForMicroservice<IMembershipManager>();
         }
 
         static RegisterRequest GetRegisterRequest(string name)

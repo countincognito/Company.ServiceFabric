@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Company.ServiceFabric.Client
 {
-    public class AuditableFabricTransportServiceRemotingClientFactory
+    public class TrackingFabricTransportServiceRemotingClientFactory
         : IServiceRemotingClientFactory
     {
         private readonly IServiceRemotingClientFactory _InnerClientFactory;
@@ -17,7 +17,7 @@ namespace Company.ServiceFabric.Client
         public event EventHandler<CommunicationClientEventArgs<IServiceRemotingClient>> ClientConnected;
         public event EventHandler<CommunicationClientEventArgs<IServiceRemotingClient>> ClientDisconnected;
 
-        public AuditableFabricTransportServiceRemotingClientFactory(IServiceRemotingClientFactory innerClientFactory)
+        public TrackingFabricTransportServiceRemotingClientFactory(IServiceRemotingClientFactory innerClientFactory)
         {
             _InnerClientFactory = innerClientFactory ?? throw new ArgumentNullException(nameof(innerClientFactory));
             _InnerClientFactory.ClientConnected += OnClientConnected;
@@ -59,7 +59,7 @@ namespace Company.ServiceFabric.Client
                 listenerName,
                 retrySettings,
                 cancellationToken);
-            return new AuditableFabricTransportServiceRemotingClient(client);
+            return new TrackingFabricTransportServiceRemotingClient(client);
         }
 
         public async Task<IServiceRemotingClient> GetClientAsync(
@@ -75,7 +75,7 @@ namespace Company.ServiceFabric.Client
                 listenerName,
                 retrySettings,
                 cancellationToken);
-            return new AuditableFabricTransportServiceRemotingClient(client);
+            return new TrackingFabricTransportServiceRemotingClient(client);
         }
 
         public Task<OperationRetryControl> ReportOperationExceptionAsync(
@@ -88,7 +88,7 @@ namespace Company.ServiceFabric.Client
                 // This expects a an object of type FabricTransportServiceRemotingClient, hence
                 // why we need to expose the InnerClient here.
                 // https://github.com/Azure/service-fabric-services-and-actors-dotnet/issues/43
-                ((AuditableFabricTransportServiceRemotingClient)client).InnerClient,
+                ((TrackingFabricTransportServiceRemotingClient)client).InnerClient,
                 exceptionInformation,
                 retrySettings,
                 cancellationToken);

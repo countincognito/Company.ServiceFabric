@@ -4,16 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Company.Utility.Audit
+namespace Company.Utility.Logging.Serilog
 {
-    public class AuditContextEnricher
+    public class TrackingContextEnricher
         : ILogEventEnricher
     {
         /// <summary>
         /// The property name added to enriched log events.
         /// </summary>
-        public const string CallChainIdPropertyName = nameof(AuditContext.CallChainId);
-        public const string OriginatorUtcTimestampPropertyName = nameof(AuditContext.OriginatorUtcTimestamp);
+        public const string CallChainIdPropertyName = nameof(TrackingContext.CallChainId);
+        public const string OriginatorUtcTimestampPropertyName = nameof(TrackingContext.OriginatorUtcTimestamp);
 
         /// <summary>
         /// Enrich the log event.
@@ -22,7 +22,7 @@ namespace Company.Utility.Audit
         /// <param name="propertyFactory">Factory for creating new properties to add to the event.</param>
         public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
         {
-            AuditContext context = AuditContext.Current;
+            TrackingContext context = TrackingContext.Current;
             if (context != null)
             {
                 logEvent.AddPropertyIfAbsent(new LogEventProperty(CallChainIdPropertyName, new ScalarValue(context.CallChainId)));
