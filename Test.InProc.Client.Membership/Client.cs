@@ -10,6 +10,7 @@ using Company.Utility.Logging.Serilog;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Test.InProc.Membership
@@ -27,9 +28,11 @@ namespace Test.InProc.Membership
                 for (int i = 0; i < 10; i++)
                 {
                     // THIS IS NECESSARY FOR INPROC CALLS.
-                    TrackingContext.NewCurrent();
+                    TrackingContext tc = TrackingContext.NewCurrent();
 
-                    Task<string> response = proxy.RegisterMemberAsync(GetRegisterRequest(TrackingContext.Current.CallChainId.ToString()));
+                    Debug.Assert(tc != null);
+
+                    Task<string> response = proxy.RegisterMemberAsync(GetRegisterRequest(tc.CallChainId.ToString()));
                     tasks.Add(response);
                 }
                 Task.WaitAll(tasks.ToArray());
@@ -57,9 +60,11 @@ namespace Test.InProc.Membership
                 for (int i = 0; i < 10; i++)
                 {
                     // THIS IS NECESSARY FOR INPROC CALLS.
-                    TrackingContext.NewCurrent();
+                    TrackingContext tc = TrackingContext.NewCurrent();
 
-                    string response = await proxy.RegisterMemberAsync(GetRegisterRequest(TrackingContext.Current.CallChainId.ToString()));
+                    Debug.Assert(tc != null);
+
+                    string response = await proxy.RegisterMemberAsync(GetRegisterRequest(tc.CallChainId.ToString())).ConfigureAwait(false);
                     Console.WriteLine(response);
                 }
 
@@ -74,7 +79,6 @@ namespace Test.InProc.Membership
         public static void Test()
         {
             ILogger serilog = new LoggerConfiguration()
-                .Enrich.FromTrackingContext()
                 .Enrich.FromLoggingProxy()
                 .WriteTo.Seq("http://localhost:5341")
                 .CreateLogger();

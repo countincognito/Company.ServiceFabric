@@ -15,18 +15,27 @@ namespace Company.Access.User.Impl
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task<bool> CheckUserExistsAsync(string name)
+        public async Task<bool> CheckUserExistsAsync(string name)
         {
             _Logger.Information($@"{nameof(CheckUserExistsAsync)} Invoked");
             _Logger.Information($@"{nameof(CheckUserExistsAsync)} {name}");
-            return Task.FromResult(false);
+
+            await Task.Delay(new Random().Next(100, 500)).ConfigureAwait(false);
+
+            return await Task.FromResult(false).ConfigureAwait(false);
         }
 
-        public Task<string> CreateUserAsync(string name)
+        public async Task<string> CreateUserAsync(string name)
         {
             _Logger.Information($@"{nameof(CreateUserAsync)} Invoked");
             _Logger.Information($@"{nameof(CreateUserAsync)} {name}");
-            return Task.FromResult($"\r\n        UserAccess.CreateUserAsync -> {name} -> {DateTime.UtcNow}");
+
+
+            throw new Exception();
+
+            await Task.Delay(new Random().Next(100, 500)).ConfigureAwait(false);
+
+            return await Task.FromResult($"\r\n        UserAccess.CreateUserAsync -> {name} -> {DateTime.UtcNow}").ConfigureAwait(false);
         }
     }
 }

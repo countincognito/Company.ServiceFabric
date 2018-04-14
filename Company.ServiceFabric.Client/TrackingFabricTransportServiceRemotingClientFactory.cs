@@ -58,7 +58,7 @@ namespace Company.ServiceFabric.Client
                 targetReplicaSelector,
                 listenerName,
                 retrySettings,
-                cancellationToken);
+                cancellationToken).ConfigureAwait(false);
             return new TrackingFabricTransportServiceRemotingClient(client);
         }
 
@@ -74,7 +74,7 @@ namespace Company.ServiceFabric.Client
                 targetReplicaSelector,
                 listenerName,
                 retrySettings,
-                cancellationToken);
+                cancellationToken).ConfigureAwait(false);
             return new TrackingFabricTransportServiceRemotingClient(client);
         }
 

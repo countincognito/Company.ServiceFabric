@@ -69,7 +69,8 @@ namespace Company.ServiceFabric.Client
 
         public async Task<IServiceRemotingResponseMessage> RequestResponseAsync(IServiceRemotingRequestMessage requestMessage)
         {
-            IServiceRemotingResponseMessage responseMessage = await _InnerClient.RequestResponseAsync(TrackingHelper.ProcessRequest(requestMessage));
+            IServiceRemotingResponseMessage responseMessage =
+                await _InnerClient.RequestResponseAsync(TrackingHelper.ProcessRequest(requestMessage)).ConfigureAwait(false);
             return TrackingHelper.ProcessResponse(responseMessage);
         }
 

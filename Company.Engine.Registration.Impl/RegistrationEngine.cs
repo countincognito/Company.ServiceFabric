@@ -27,12 +27,12 @@ namespace Company.Engine.Registration.Impl
             _Logger.Information($"{nameof(RegisterMemberAsync)} {request.Name}");
 
             // Check if user already exists or not.
-            bool userExists = await _UserAccess.CheckUserExistsAsync(request.Name);
+            bool userExists = await _UserAccess.CheckUserExistsAsync(request.Name).ConfigureAwait(false);
 
             string result = "Failed";
             if (!userExists)
             {
-                result = await _UserAccess.CreateUserAsync(request.Name);
+                result = await _UserAccess.CreateUserAsync(request.Name).ConfigureAwait(false);
             }
 
             // Do other stuff.....

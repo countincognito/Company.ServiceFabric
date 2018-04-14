@@ -21,7 +21,6 @@ namespace Company.Access.User.Service
                     ConfigurationPackage configPackage = context.CodePackageActivationContext.GetConfigurationPackageObject(@"Config");
                     ILogger serilog = new LoggerConfiguration()
                         .Enrich.FromServiceContext(context)
-                        .Enrich.FromTrackingContext()
                         .Enrich.FromLoggingProxy()
                         .WriteTo.Seq(configPackage.Settings.Sections[@"ResourceSettings"].Parameters[@"seqLocation"].Value)
                         .CreateLogger();

@@ -47,7 +47,7 @@ namespace Company.Api.Rest.Service
             try
             {
                 var request = _Mapper.Map<RegisterRequest>(requestDto);
-                string result = await _MembershipManager.RegisterMemberAsync(request);
+                string result = await _MembershipManager.RegisterMemberAsync(request).ConfigureAwait(false);
                 if (!string.IsNullOrWhiteSpace(result))
                 {
                     return Ok(result);

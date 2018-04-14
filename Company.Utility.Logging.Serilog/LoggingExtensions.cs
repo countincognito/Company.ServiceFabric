@@ -21,7 +21,9 @@ namespace Company.Utility.Logging.Serilog
             {
                 throw new ArgumentNullException(nameof(enrichmentConfiguration));
             }
-            return enrichmentConfiguration.FromLogContext();
+            return enrichmentConfiguration.FromLogContext()
+                .Enrich.WithMachineName()
+                .Enrich.FromTrackingContext();
         }
     }
 }

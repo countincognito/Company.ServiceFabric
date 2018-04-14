@@ -11,7 +11,6 @@ namespace Company.Utility.Logging.Serilog
         /// <summary>
         /// The property name added to enriched log events.
         /// </summary>
-        public const string HostnamePropertyName = @"Hostname";
         public const string NamespacePropertyName = nameof(Type.Namespace);
         public const string TypePropertyName = nameof(Type);
         public const string MethodPropertyName = @"Method";
@@ -30,7 +29,6 @@ namespace Company.Utility.Logging.Serilog
         /// <param name="propertyFactory">Factory for creating new properties to add to the event.</param>
         public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
         {
-            logEvent.AddPropertyIfAbsent(new LogEventProperty(HostnamePropertyName, new ScalarValue(Environment.MachineName)));
             logEvent.AddPropertyIfAbsent(new LogEventProperty(NamespacePropertyName, new ScalarValue(m_Invocation.TargetType?.Namespace)));
             logEvent.AddPropertyIfAbsent(new LogEventProperty(TypePropertyName, new ScalarValue(m_Invocation.TargetType?.Name)));
             logEvent.AddPropertyIfAbsent(new LogEventProperty(MethodPropertyName, new ScalarValue(m_Invocation.Method?.Name)));

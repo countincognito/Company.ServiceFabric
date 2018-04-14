@@ -56,7 +56,7 @@ namespace Test.Client.Membership
                 var proxy = GetProxy();
                 for (int i = 0; i < 10; i++)
                 {
-                    string response = await proxy.RegisterMemberAsync(GetRegisterRequest(Guid.NewGuid().ToString()));
+                    string response = await proxy.RegisterMemberAsync(GetRegisterRequest(Guid.NewGuid().ToString())).ConfigureAwait(false);
                     Console.WriteLine(response);
                 }
 
@@ -78,7 +78,7 @@ namespace Test.Client.Membership
                 ConsoleKeyInfo? input = null;
                 while (!input.HasValue)
                 {
-                    string response = await proxy.RegisterMemberAsync(GetRegisterRequest(Guid.NewGuid().ToString()));
+                    string response = await proxy.RegisterMemberAsync(GetRegisterRequest(Guid.NewGuid().ToString())).ConfigureAwait(false);
                     Console.WriteLine(response);
                     Task.Factory.StartNew(() => input = Console.ReadKey()).Wait(TimeSpan.FromSeconds(0.5));
                 }

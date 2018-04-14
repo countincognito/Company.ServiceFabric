@@ -21,7 +21,7 @@ namespace Company.ServiceFabric.Server
             IServiceRemotingRequestMessage requestMessage)
         {
             IServiceRemotingResponseMessage responseMessage =
-                await base.HandleRequestResponseAsync(requestContext, TrackingHelper.ProcessRequest(requestMessage));
+                await base.HandleRequestResponseAsync(requestContext, TrackingHelper.ProcessRequest(requestMessage)).ConfigureAwait(false);
 
             return TrackingHelper.ProcessResponse(responseMessage);
         }

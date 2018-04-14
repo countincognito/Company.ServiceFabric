@@ -25,7 +25,7 @@ namespace Company.Manager.Membership.Impl
         {
             _Logger.Information($"{nameof(RegisterMemberAsync)} Invoked");
             _Logger.Information($"{nameof(RegisterMemberAsync)} {request.Name}");
-            string result = await _RegistrationEngine.RegisterMemberAsync(request);
+            string result = await _RegistrationEngine.RegisterMemberAsync(request).ConfigureAwait(false);
             return $"\r\nMembershipManager.RegisterMemberAsync -> {result}";
         }
     }

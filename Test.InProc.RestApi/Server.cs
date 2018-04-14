@@ -19,7 +19,6 @@ namespace Test.InProc.RestApi
         public static void Test()
         {
             ILogger serilog = new LoggerConfiguration()
-                .Enrich.FromTrackingContext()
                 .Enrich.FromLoggingProxy()
                 .WriteTo.Seq("http://localhost:5341")
                 .CreateLogger();
