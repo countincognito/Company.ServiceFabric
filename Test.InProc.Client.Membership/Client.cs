@@ -28,11 +28,11 @@ namespace Test.InProc.Membership
                 for (int i = 0; i < 10; i++)
                 {
                     // THIS IS NECESSARY FOR INPROC CALLS.
-                    TrackingContext tc = TrackingContext.NewCurrent();
+                    TrackingContext.NewCurrent();
 
-                    Debug.Assert(tc != null);
+                    Debug.Assert(TrackingContext.Current != null);
 
-                    Task<string> response = proxy.RegisterMemberAsync(GetRegisterRequest(tc.CallChainId.ToString()));
+                    Task<string> response = proxy.RegisterMemberAsync(GetRegisterRequest(TrackingContext.Current.CallChainId.ToString()));
                     tasks.Add(response);
                 }
                 Task.WaitAll(tasks.ToArray());
@@ -60,11 +60,11 @@ namespace Test.InProc.Membership
                 for (int i = 0; i < 10; i++)
                 {
                     // THIS IS NECESSARY FOR INPROC CALLS.
-                    TrackingContext tc = TrackingContext.NewCurrent();
+                    TrackingContext.NewCurrent();
 
-                    Debug.Assert(tc != null);
+                    Debug.Assert(TrackingContext.Current != null);
 
-                    string response = await proxy.RegisterMemberAsync(GetRegisterRequest(tc.CallChainId.ToString())).ConfigureAwait(false);
+                    string response = await proxy.RegisterMemberAsync(GetRegisterRequest(TrackingContext.Current.CallChainId.ToString())).ConfigureAwait(false);
                     Console.WriteLine(response);
                 }
 

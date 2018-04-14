@@ -31,9 +31,9 @@ namespace Company.Api.Rest.Service
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             // Just in case we decide to go InProc.
-            TrackingContext tc = TrackingContext.NewCurrentIfEmpty(new Dictionary<string, string>() { { "Jurisdiction", "UK" } });
+            TrackingContext.NewCurrentIfEmpty(new Dictionary<string, string>() { { "Jurisdiction", "UK" } });
 
-            Debug.Assert(tc != null);
+            Debug.Assert(TrackingContext.Current != null);
         }
 
         [HttpPost("register")]
@@ -53,9 +53,9 @@ namespace Company.Api.Rest.Service
                     return Ok(result);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _Logger.Error(e.ToString());
+                _Logger.Error(ex, "Error caught in the controller class.");
             }
             return BadRequest(HttpStatusCode.BadRequest);
         }

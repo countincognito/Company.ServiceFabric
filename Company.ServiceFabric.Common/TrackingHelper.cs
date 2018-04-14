@@ -31,12 +31,12 @@ namespace Company.ServiceFabric.Common
             else
             {
                 // If no tracking context exists then create one.
-                TrackingContext tc = TrackingContext.NewCurrentIfEmpty();
-                
-                Debug.Assert(tc != null);
+                TrackingContext.NewCurrentIfEmpty();
+
+                Debug.Assert(TrackingContext.Current != null);
 
                 // Copy the tracking context to the message header.
-                byteArray = TrackingContext.Serialize(tc);
+                byteArray = TrackingContext.Serialize(TrackingContext.Current);
                 requestMessageHeader.AddHeader(TrackingContext.FullName, byteArray);
             }
 
@@ -67,12 +67,12 @@ namespace Company.ServiceFabric.Common
             else
             {
                 // If no tracking context exists then create one.
-                TrackingContext tc = TrackingContext.NewCurrentIfEmpty();
-                
-                Debug.Assert(tc != null);
+                TrackingContext.NewCurrentIfEmpty();
+
+                Debug.Assert(TrackingContext.Current != null);
 
                 // Copy the tracking context to the message header.
-                byteArray = TrackingContext.Serialize(tc);
+                byteArray = TrackingContext.Serialize(TrackingContext.Current);
                 responseMessageHeader.AddHeader(TrackingContext.FullName, byteArray);
             }
 
