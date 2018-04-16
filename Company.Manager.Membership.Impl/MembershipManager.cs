@@ -1,6 +1,7 @@
 ﻿using Company.Common.Data;
 using Company.Engine.Registration.Interface;
 using Company.Manager.Membership.Interface;
+using Company.Utility.Logging.Serilog;
 using Serilog;
 using System;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace Company.Manager.Membership.Impl
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        [NoDiagnosticLogging]
         public async Task<string> RegisterMemberAsync(RegisterRequest request)
         {
             _Logger.Information($"{nameof(RegisterMemberAsync)} Invoked");

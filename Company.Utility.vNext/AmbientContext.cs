@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 
@@ -21,6 +24,7 @@ namespace Company.Utility
         /// <param name="data">The object to store in the call context.</param>
         public static void SetData<T>(T data) where T : class
         {
+            Debug.Assert(IsDataContract(typeof(T)) || typeof(T).IsSerializable);
             if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
@@ -35,6 +39,7 @@ namespace Company.Utility
         /// <returns>The object in the call context associated with the specified name, or <see langword="null"/> if not found.</returns>
         public static T GetData<T>() where T : class
         {
+            Debug.Assert(IsDataContract(typeof(T)) || typeof(T).IsSerializable);
             if (_State.TryGetValue(typeof(T), out AsyncLocal<byte[]> data))
             {
                 if (data.Value == null)
@@ -53,6 +58,7 @@ namespace Company.Utility
 
         public static byte[] Serialize<T>(T obj) where T : class
         {
+            Debug.Assert(IsDataContract(typeof(T)) || typeof(T).IsSerializable);
             if (obj == null)
             {
                 throw new ArgumentNullException(nameof(obj));
@@ -63,12 +69,19 @@ namespace Company.Utility
 
         public static T DeSerialize<T>(byte[] array) where T : class
         {
+            Debug.Assert(IsDataContract(typeof(T)) || typeof(T).IsSerializable);
             if (array == null)
             {
                 throw new ArgumentNullException(nameof(array));
             }
             string json = Encoding.UTF8.GetString(array);
             return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        private static bool IsDataContract(Type type)
+        {
+            object[] attributes = type.GetCustomAttributes(typeof(DataContractAttribute), false);
+            return attributes.Any();
         }
     }
 }

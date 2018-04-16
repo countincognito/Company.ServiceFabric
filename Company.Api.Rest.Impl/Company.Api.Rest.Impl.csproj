@@ -25,7 +25,7 @@
     <ProjectReference Include="..\Company.Api.Rest.Data\Company.Api.Rest.Data.csproj" />
     <ProjectReference Include="..\Company.Api.Rest.Interface\Company.Api.Rest.Interface.csproj" />
     <ProjectReference Include="..\Company.Manager.Membership.Interface\Company.Manager.Membership.Interface.csproj" />
-    <ProjectReference Include="..\Company.Utility.vNext\Company.Utility.vNext.csproj" />
+    <ProjectReference Include="..\Company.Utility.AspNetCore.Http\Company.Utility.AspNetCore.Http.csproj" />
   </ItemGroup>
   
 </Project>

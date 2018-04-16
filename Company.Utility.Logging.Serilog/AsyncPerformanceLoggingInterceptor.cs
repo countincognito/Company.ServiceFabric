@@ -9,16 +9,17 @@ namespace Company.Utility.Logging.Serilog
     public class AsyncPerformanceLoggingInterceptor
         : AsyncTimingInterceptor
     {
-            private readonly ILogger m_Logger;
+        public const string LogTypeName = nameof(LogType);
+        private readonly ILogger m_Logger;
 
-            public AsyncPerformanceLoggingInterceptor(ILogger logger)
-            {
-                m_Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            }
+        public AsyncPerformanceLoggingInterceptor(ILogger logger)
+        {
+            m_Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
         protected override void StartingTiming(IInvocation invocation)
         {
-            using (LogContext.PushProperty(nameof(LogType), LogType.Performance))
+            using (LogContext.PushProperty(LogTypeName, LogType.Performance))
             using (LogContext.Push(new InvocationEnricher(invocation)))
             {
                 m_Logger.Information($"{GetSourceMessage(invocation)} timing started");
@@ -29,7 +30,7 @@ namespace Company.Utility.Logging.Serilog
         {
             long elapsedMilliseconds = state.ElapsedMilliseconds;
 
-            using (LogContext.PushProperty(nameof(LogType), LogType.Performance))
+            using (LogContext.PushProperty(LogTypeName, LogType.Performance))
             using (LogContext.Push(new InvocationEnricher(invocation)))
             {
                 m_Logger.Information($"{GetSourceMessage(invocation)} ElapsedMilliseconds: {{ElapsedMilliseconds}}", elapsedMilliseconds);
@@ -42,7 +43,7 @@ namespace Company.Utility.Logging.Serilog
             {
                 throw new ArgumentNullException(nameof(invocation));
             }
-            return $"Perf-{invocation.TargetType?.Namespace}.{invocation.TargetType?.Name}.{invocation.Method?.Name}";
+            return $"performance-{invocation.TargetType?.Namespace}.{invocation.TargetType?.Name}.{invocation.Method?.Name}";
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Company.Utility.Logging.Serilog
     public class AsyncErrorLoggingInterceptor
         : AsyncInterceptorBase
     {
+        public const string LogTypeName = nameof(LogType);
         private readonly ILogger m_Logger;
         private readonly IDestructuringOptions m_DestructuringOptions;
 
@@ -51,7 +52,7 @@ namespace Company.Utility.Logging.Serilog
             {
                 throw new ArgumentNullException(nameof(invocation));
             }
-            using (LogContext.PushProperty(nameof(LogType), LogType.Error))
+            using (LogContext.PushProperty(LogTypeName, LogType.Error))
             using (LogContext.Push(new InvocationEnricher(invocation)))
             using (LogContext.Push(new ExceptionEnricher(m_DestructuringOptions)))
             {
@@ -65,7 +66,7 @@ namespace Company.Utility.Logging.Serilog
             {
                 throw new ArgumentNullException(nameof(invocation));
             }
-            return $"Error-{invocation.TargetType?.Namespace}.{invocation.TargetType?.Name}.{invocation.Method?.Name}";
+            return $"error-{invocation.TargetType?.Namespace}.{invocation.TargetType?.Name}.{invocation.Method?.Name}";
         }
     }
 }

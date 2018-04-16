@@ -6,12 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Serilog" Version="2.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Company.Engine.Registration.Interface\Company.Engine.Registration.Interface.csproj" />
-    <ProjectReference Include="..\Company.Manager.Membership.Interface\Company.Manager.Membership.Interface.csproj" />
     <ProjectReference Include="..\Company.Utility.Logging.Serilog\Company.Utility.Logging.Serilog.csproj" />
   </ItemGroup>
 

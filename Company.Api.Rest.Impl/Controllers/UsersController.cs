@@ -2,14 +2,13 @@
 using Company.Api.Rest.Data;
 using Company.Common.Data;
 using Company.Manager.Membership.Interface;
-using Company.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
+using Zametek.Utility;
 
 namespace Company.Api.Rest.Service
 {
@@ -31,7 +30,7 @@ namespace Company.Api.Rest.Service
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             // Just in case we decide to go InProc.
-            TrackingContext.NewCurrentIfEmpty(new Dictionary<string, string>() { { "Jurisdiction", "UK" } });
+            //
 
             Debug.Assert(TrackingContext.Current != null);
         }

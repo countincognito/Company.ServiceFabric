@@ -7,10 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ServiceFabric.Actors" Version="3.0.480" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Company.Utility.vNext\Company.Utility.vNext.csproj" />
+    <PackageReference Include="Zametek.Utility" Version="2.0.0" />
   </ItemGroup>
 
 </Project>

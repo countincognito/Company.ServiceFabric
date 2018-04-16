@@ -1,7 +1,7 @@
-﻿using Company.Utility;
-using Microsoft.ServiceFabric.Services.Remoting.V2;
+﻿using Microsoft.ServiceFabric.Services.Remoting.V2;
 using System;
 using System.Diagnostics;
+using Zametek.Utility;
 
 namespace Company.ServiceFabric.Common
 {

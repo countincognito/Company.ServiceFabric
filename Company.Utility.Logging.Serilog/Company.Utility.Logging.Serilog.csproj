@@ -6,13 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Castle.Core.AsyncInterceptor" Version="1.5.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.2" />
     <PackageReference Include="Serilog.Exceptions" Version="4.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Company.Utility.vNext\Company.Utility.vNext.csproj" />
+    <PackageReference Include="Zametek.Utility" Version="2.0.0" />
   </ItemGroup>
 
 </Project>

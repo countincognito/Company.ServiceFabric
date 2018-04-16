@@ -1,7 +1,6 @@
 ﻿using Company.Common.Data;
 using Company.Manager.Membership.Interface;
 using Company.ServiceFabric.Client;
-using Company.Utility;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

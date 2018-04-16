@@ -12,7 +12,9 @@ namespace Company.Utility.Logging.Serilog
             {
                 throw new ArgumentNullException(nameof(enrichmentConfiguration));
             }
-            return enrichmentConfiguration.With<TrackingContextEnricher>();
+            return enrichmentConfiguration
+                .With<TrackingContextEnricher>()
+                .Enrich.WithMachineName();
         }
 
         public static LoggerConfiguration FromLoggingProxy(this LoggerEnrichmentConfiguration enrichmentConfiguration)
@@ -22,7 +24,6 @@ namespace Company.Utility.Logging.Serilog
                 throw new ArgumentNullException(nameof(enrichmentConfiguration));
             }
             return enrichmentConfiguration.FromLogContext()
-                .Enrich.WithMachineName()
                 .Enrich.FromTrackingContext();
         }
     }

@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Company.Utility.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
+using Zametek.Utility;
 
 namespace Company.Api.Rest.Impl
 {
@@ -40,6 +43,14 @@ namespace Company.Api.Rest.Impl
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseTrackingMiddleware(() =>
+            {
+                TrackingContext.NewCurrent(
+                    new Dictionary<string, string>()
+                    {
+                        { "Jurisdiction", "UK" }
+                    });
+            });
             app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUI(c =>

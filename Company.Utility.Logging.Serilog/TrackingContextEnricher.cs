@@ -3,6 +3,7 @@ using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Zametek.Utility;
 
 namespace Company.Utility.Logging.Serilog
 {

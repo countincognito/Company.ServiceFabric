@@ -5,13 +5,13 @@ using Company.Engine.Registration.Impl;
 using Company.Engine.Registration.Interface;
 using Company.Manager.Membership.Impl;
 using Company.Manager.Membership.Interface;
-using Company.Utility;
 using Company.Utility.Logging.Serilog;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Zametek.Utility;
 
 namespace Test.InProc.Membership
 {

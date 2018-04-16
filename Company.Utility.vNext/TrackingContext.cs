@@ -105,13 +105,13 @@ namespace Company.Utility
         /// <summary>
         /// Dangerous! Use with caution.
         /// </summary>
-        //public static void ClearCurrent()
-        //{
-        //    lock (m_Lock)
-        //    {
-        //        AmbientContext.Clear<TrackingContext>();
-        //    }
-        //}
+        public static void ClearCurrent()
+        {
+            lock (m_Lock)
+            {
+                AmbientContext.Clear<TrackingContext>();
+            }
+        }
 
         /// <summary>
         /// Dangerous! Use with caution.
