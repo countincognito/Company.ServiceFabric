@@ -1,12 +1,14 @@
 ﻿using Company.Access.User.Interface;
 using Company.Common.Data;
 using Company.Engine.Registration.Interface;
+using Company.Utility.Logging.Serilog;
 using Serilog;
 using System;
 using System.Threading.Tasks;
 
 namespace Company.Engine.Registration.Impl
 {
+    [NoDiagnosticLogging]
     public class RegistrationEngine
         : IRegistrationEngine
     {

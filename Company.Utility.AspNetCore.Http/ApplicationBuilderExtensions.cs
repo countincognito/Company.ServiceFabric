@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using System;
+using System.Collections.Generic;
 
 namespace Company.Utility.AspNetCore.Http
 {
@@ -7,9 +7,9 @@ namespace Company.Utility.AspNetCore.Http
     {
         public static IApplicationBuilder UseTrackingMiddleware(
             this IApplicationBuilder builder,
-            Action setupAction = null)
+            IDictionary<string, string> extraHeaders = null)
         {
-            return builder.UseMiddleware<TrackingMiddleware>(setupAction);
+            return builder.UseMiddleware<TrackingMiddleware>(extraHeaders);
         }
     }
 }

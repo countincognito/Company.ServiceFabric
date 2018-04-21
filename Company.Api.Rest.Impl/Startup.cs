@@ -43,14 +43,11 @@ namespace Company.Api.Rest.Impl
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseTrackingMiddleware(() =>
-            {
-                TrackingContext.NewCurrent(
-                    new Dictionary<string, string>()
-                    {
-                        { "Jurisdiction", "UK" }
-                    });
-            });
+            app.UseTrackingMiddleware(
+                extraHeaders: new Dictionary<string, string>()
+                {
+                    { "Jurisdiction", "UK" }
+                });
             app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUI(c =>

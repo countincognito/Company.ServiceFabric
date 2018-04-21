@@ -1,7 +1,7 @@
 ﻿using Company.Utility.Logging.Serilog;
 using Microsoft.AspNetCore.Http;
 using Serilog.Context;
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Zametek.Utility;
 
@@ -13,18 +13,17 @@ namespace Company.Utility.AspNetCore.Http
         public const string TraceIdentifierName = nameof(HttpContext.TraceIdentifier);
         public const string UserIdName = @"UserId";
         private readonly RequestDelegate _next;
-        private readonly Action _setupAction;
+        private readonly IDictionary<string, string> _extraHeaders;
 
-        public TrackingMiddleware(RequestDelegate next, Action setupAction)
+        public TrackingMiddleware(RequestDelegate next, IDictionary<string, string> extraHeaders)
         {
             _next = next;
-            _setupAction = setupAction;
+            _extraHeaders = extraHeaders ?? new Dictionary<string, string>();
         }
 
         public Task Invoke(HttpContext httpContext)
         {
-            _setupAction?.Invoke();
-            TrackingContext.NewCurrentIfEmpty();
+            TrackingContext.NewCurrentIfEmpty(_extraHeaders);
 
             using (LogContext.Push(new TrackingContextEnricher()))
             using (LogContext.PushProperty(RemoteIpAddressName, httpContext.Connection.RemoteIpAddress))

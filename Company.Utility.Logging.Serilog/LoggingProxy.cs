@@ -2,6 +2,7 @@
 using Serilog;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Company.Utility.Logging.Serilog
 {
@@ -12,7 +13,7 @@ namespace Company.Utility.Logging.Serilog
         public static I Create<I>(
             I instance,
             ILogger logger,
-            LogType logType = LogType.Tracking | LogType.Usage | LogType.Error | LogType.Performance | LogType.Diagnostic ) where I : class
+            LogType logType = LogType.Tracking | LogType.Usage | LogType.Error | LogType.Performance | LogType.Diagnostic) where I : class
         {
             Debug.Assert(typeof(I).IsInterface);
 
@@ -40,7 +41,13 @@ namespace Company.Utility.Logging.Serilog
 
             if (useAll || logType.HasFlag(LogType.Diagnostic))
             {
-                interceptors.Add(new AsyncDiagnosticLoggingInterceptor(logger).ToInterceptor());
+                // Check for NoDiagnosticLogging Class scope.
+                bool classHasNoDiagnosticAttribute = instance.GetType().GetCustomAttributes(typeof(NoDiagnosticLoggingAttribute), false).Any();
+
+                if (!classHasNoDiagnosticAttribute)
+                {
+                    interceptors.Add(new AsyncDiagnosticLoggingInterceptor(logger).ToInterceptor());
+                }
             }
 
             return _ProxyGenerator.CreateInterfaceProxyWithTargetInterface(instance, interceptors.ToArray());

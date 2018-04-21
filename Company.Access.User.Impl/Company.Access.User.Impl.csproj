@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Company.Access.User.Interface\Company.Access.User.Interface.csproj" />
+    <ProjectReference Include="..\Company.Utility.Logging.Serilog\Company.Utility.Logging.Serilog.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Company.Access.User.Interface;
+using Company.Utility.Logging.Serilog;
 using Serilog;
 using System;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace Company.Access.User.Impl
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<bool> CheckUserExistsAsync(string name)
+        public async Task<bool> CheckUserExistsAsync([NoDiagnosticLogging]string name)
         {
             _Logger.Information($@"{nameof(CheckUserExistsAsync)} Invoked");
             _Logger.Information($@"{nameof(CheckUserExistsAsync)} {name}");
@@ -25,6 +26,7 @@ namespace Company.Access.User.Impl
             return await Task.FromResult(false).ConfigureAwait(false);
         }
 
+        [NoDiagnosticLogging]
         public async Task<string> CreateUserAsync(string name)
         {
             _Logger.Information($@"{nameof(CreateUserAsync)} Invoked");
