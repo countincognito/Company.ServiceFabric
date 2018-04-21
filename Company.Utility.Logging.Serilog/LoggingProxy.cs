@@ -13,7 +13,7 @@ namespace Company.Utility.Logging.Serilog
         public static I Create<I>(
             I instance,
             ILogger logger,
-            LogType logType = LogType.Tracking | LogType.Usage | LogType.Error | LogType.Performance | LogType.Diagnostic) where I : class
+            LogType logType = LogType.Tracking | LogType.Error | LogType.Performance | LogType.Diagnostic) where I : class
         {
             Debug.Assert(typeof(I).IsInterface);
 
@@ -23,10 +23,6 @@ namespace Company.Utility.Logging.Serilog
             if (useAll || logType.HasFlag(LogType.Tracking))
             {
                 interceptors.Add(new AsyncTrackingInterceptor().ToInterceptor());
-            }
-
-            if (useAll || logType.HasFlag(LogType.Usage))
-            {
             }
 
             if (useAll || logType.HasFlag(LogType.Error))

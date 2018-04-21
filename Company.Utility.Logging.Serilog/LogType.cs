@@ -7,9 +7,8 @@ namespace Company.Utility.Logging.Serilog
     {
         All = 0,
         Tracking = 1 << 0,
-        Usage = 1 << 1,
-        Error = 1 << 2,
-        Performance = 1 << 3,
-        Diagnostic = 1 << 4,
+        Error = 1 << 1,
+        Performance = 1 << 2,
+        Diagnostic = 1 << 3,
     }
 }
