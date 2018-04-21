@@ -10,10 +10,12 @@ using System.Threading.Tasks;
 namespace Company.Utility.Logging.Serilog
 {
     public class AsyncDiagnosticLoggingInterceptor
-        : AsyncInterceptorBase
+        : ProcessingAsyncInterceptor<object>
     {
         public const string LogTypeName = nameof(LogType);
         public const string ArgumentsName = nameof(IInvocation.Arguments);
+        public const string ReturnValueName = nameof(IInvocation.ReturnValue);
+        public const string VoidSubstitute = @"__VOID__";
         public const string FilteredParameterSubstitute = @"__FILTERED__";
         private readonly ILogger m_Logger;
 
@@ -22,7 +24,7 @@ namespace Company.Utility.Logging.Serilog
             m_Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        protected override async Task InterceptAsync(IInvocation invocation, Func<IInvocation, Task> proceed)
+        protected override object StartingInvocation(IInvocation invocation)
         {
             bool mustLog = MustLog(invocation);
 
@@ -31,19 +33,17 @@ namespace Company.Utility.Logging.Serilog
                 LogBeforeInvocation(invocation);
             }
 
-            await proceed(invocation).ConfigureAwait(false);
+            return null;
         }
 
-        protected override async Task<T> InterceptAsync<T>(IInvocation invocation, Func<IInvocation, Task<T>> proceed)
+        protected override void CompletedInvocation(IInvocation invocation, object state, object returnValue)
         {
             bool mustLog = MustLog(invocation);
 
             if (mustLog)
             {
-                LogBeforeInvocation(invocation);
+                LogAfterInvocation(invocation, returnValue);
             }
-
-            return await proceed(invocation).ConfigureAwait(false);
         }
 
         private static bool MustLog(IInvocation invocation)
@@ -77,6 +77,27 @@ namespace Company.Utility.Logging.Serilog
             using (LogContext.PushProperty(LogTypeName, LogType.Diagnostic))
             using (LogContext.Push(new InvocationEnricher(invocation)))
             using (LogContext.PushProperty(ArgumentsName, filteredParameters, destructureObjects: true))
+            {
+                m_Logger.Information($"{GetSourceMessage(invocation)}");
+            }
+        }
+
+        private void LogAfterInvocation(IInvocation invocation, object returnValue)
+        {
+            if (invocation == null)
+            {
+                throw new ArgumentNullException(nameof(invocation));
+            }
+
+            MethodInfo methodInfo = invocation.MethodInvocationTarget;
+            Debug.Assert(methodInfo != null);
+
+            // Check for NoDiagnosticLogging ReturnValue scope.
+            object filteredReturnValue = FilterReturnValue(methodInfo, returnValue);
+
+            using (LogContext.PushProperty(LogTypeName, LogType.Diagnostic))
+            using (LogContext.Push(new InvocationEnricher(invocation)))
+            using (LogContext.PushProperty(ReturnValueName, filteredReturnValue, destructureObjects: true))
             {
                 m_Logger.Information($"{GetSourceMessage(invocation)}");
             }
@@ -117,6 +138,32 @@ namespace Company.Utility.Logging.Serilog
             }
 
             return filteredParameters;
+        }
+
+        private static object FilterReturnValue(MethodInfo methodInfo, object returnValue)
+        {
+            if (methodInfo == null)
+            {
+                throw new ArgumentNullException(nameof(methodInfo));
+            }
+
+            ParameterInfo parameterInfo = methodInfo.ReturnParameter;
+            Debug.Assert(parameterInfo != null);
+
+            bool returnValueHasNoDiagnosticAttribute = parameterInfo.GetCustomAttribute(typeof(NoDiagnosticLoggingAttribute)) != null;
+
+            if (returnValueHasNoDiagnosticAttribute)
+            {
+                return FilteredParameterSubstitute;
+            }
+
+            if (parameterInfo.ParameterType == typeof(void)
+                || parameterInfo.ParameterType == typeof(Task))
+            {
+                return VoidSubstitute;
+            }
+
+            return returnValue;
         }
 
         private static string GetSourceMessage(IInvocation invocation)

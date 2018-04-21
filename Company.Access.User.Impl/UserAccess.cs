@@ -26,7 +26,7 @@ namespace Company.Access.User.Impl
             return await Task.FromResult(false).ConfigureAwait(false);
         }
 
-        [NoDiagnosticLogging]
+        [return: NoDiagnosticLogging]
         public async Task<string> CreateUserAsync(string name)
         {
             _Logger.Information($@"{nameof(CreateUserAsync)} Invoked");
