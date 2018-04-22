@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using System;
 using System.Collections.Generic;
 
 namespace Company.Utility.Logging.AspNetCore
@@ -7,9 +8,9 @@ namespace Company.Utility.Logging.AspNetCore
     {
         public static IApplicationBuilder UseTrackingMiddleware(
             this IApplicationBuilder builder,
-            IDictionary<string, string> extraHeaders = null)
+            Func<IDictionary<string, string>> setupFunc = null)
         {
-            return builder.UseMiddleware<TrackingMiddleware>(extraHeaders);
+            return builder.UseMiddleware<TrackingMiddleware>(setupFunc);
         }
     }
 }

@@ -43,10 +43,12 @@ namespace Company.Api.Rest.Impl
             }
 
             app.UseTrackingMiddleware(
-                extraHeaders: new Dictionary<string, string>()
+                () => new Dictionary<string, string>()
                 {
-                    { "Jurisdiction", "UK" }
+                    { "Jurisdiction", "UK" },
+                    { "New call-specific random string", System.Guid.NewGuid().ToString() }
                 });
+
             app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
