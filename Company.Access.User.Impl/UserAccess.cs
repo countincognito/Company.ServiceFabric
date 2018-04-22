@@ -32,9 +32,9 @@ namespace Company.Access.User.Impl
             _Logger.Information($@"{nameof(CreateUserAsync)} Invoked");
             _Logger.Information($@"{nameof(CreateUserAsync)} {name}");
 
-            if (new Random().Next(0, 100) < 50)
+            if (string.CompareOrdinal(name, "ThrowException") == 0)
             {
-                throw new Exception("Random Exception just to make things interesting.");
+                throw new Exception("Throw Exception just to make things interesting.");
             }
 
             await Task.Delay(new Random().Next(100, 200)).ConfigureAwait(false);
