@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using Zametek.Utility;
 
-namespace Company.Utility.Logging.Serilog
+namespace Company.Utility.Logging
 {
     public class AsyncTrackingInterceptor
         : AsyncInterceptorBase

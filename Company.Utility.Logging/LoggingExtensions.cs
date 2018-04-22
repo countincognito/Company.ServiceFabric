@@ -2,7 +2,7 @@
 using Serilog.Configuration;
 using System;
 
-namespace Company.Utility.Logging.Serilog
+namespace Company.Utility.Logging
 {
     public static class LoggingExtensions
     {

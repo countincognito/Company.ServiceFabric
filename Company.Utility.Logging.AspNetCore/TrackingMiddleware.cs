@@ -1,11 +1,10 @@
-﻿using Company.Utility.Logging.Serilog;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Serilog.Context;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Zametek.Utility;
 
-namespace Company.Utility.AspNetCore.Http
+namespace Company.Utility.Logging.AspNetCore
 {
     public class TrackingMiddleware
     {

@@ -3,7 +3,7 @@ using Serilog.Core;
 using Serilog.Events;
 using System;
 
-namespace Company.Utility.Logging.Serilog
+namespace Company.Utility.Logging
 {
     public class InvocationEnricher
         : ILogEventEnricher

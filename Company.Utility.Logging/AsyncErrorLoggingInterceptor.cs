@@ -5,7 +5,7 @@ using Serilog.Exceptions.Core;
 using System;
 using System.Threading.Tasks;
 
-namespace Company.Utility.Logging.Serilog
+namespace Company.Utility.Logging
 {
     public class AsyncErrorLoggingInterceptor
         : AsyncInterceptorBase

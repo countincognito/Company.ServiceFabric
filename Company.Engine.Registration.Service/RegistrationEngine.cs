@@ -3,7 +3,7 @@ using Company.Common.Data;
 using Company.Engine.Registration.Interface;
 using Company.ServiceFabric.Client;
 using Company.ServiceFabric.Server;
-using Company.Utility.Logging.Serilog;
+using Company.Utility.Logging;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.FabricTransport.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Runtime;

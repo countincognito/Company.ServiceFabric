@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Company.Utility.Logging.Serilog
+namespace Company.Utility.Logging
 {
     public class AsyncDiagnosticLoggingInterceptor
         : ProcessingAsyncInterceptor<object>

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Company.Utility.Logging.Serilog
+namespace Company.Utility.Logging
 {
     public class LoggingProxy
     {
-        private static readonly IProxyGenerator _ProxyGenerator = new ProxyGenerator();
+        private static readonly IProxyGenerator s_ProxyGenerator = new ProxyGenerator();
 
         public static I Create<I>(
             I instance,
@@ -46,7 +46,7 @@ namespace Company.Utility.Logging.Serilog
                 }
             }
 
-            return _ProxyGenerator.CreateInterfaceProxyWithTargetInterface(instance, interceptors.ToArray());
+            return s_ProxyGenerator.CreateInterfaceProxyWithTargetInterface(instance, interceptors.ToArray());
         }
     }
 }

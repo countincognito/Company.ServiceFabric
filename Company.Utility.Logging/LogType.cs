@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Company.Utility.Logging.Serilog
+namespace Company.Utility.Logging
 {
     [Flags]
     public enum LogType

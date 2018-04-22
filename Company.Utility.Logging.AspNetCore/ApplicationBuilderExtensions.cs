@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using System.Collections.Generic;
 
-namespace Company.Utility.AspNetCore.Http
+namespace Company.Utility.Logging.AspNetCore
 {
     public static class ApplicationBuilderExtensions
     {

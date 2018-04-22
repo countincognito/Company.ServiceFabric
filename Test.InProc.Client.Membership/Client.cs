@@ -5,7 +5,7 @@ using Company.Engine.Registration.Impl;
 using Company.Engine.Registration.Interface;
 using Company.Manager.Membership.Impl;
 using Company.Manager.Membership.Interface;
-using Company.Utility.Logging.Serilog;
+using Company.Utility.Logging;
 using Serilog;
 using System;
 using System.Collections.Generic;
