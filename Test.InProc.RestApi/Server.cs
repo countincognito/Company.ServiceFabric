@@ -5,12 +5,12 @@ using Company.Engine.Registration.Impl;
 using Company.Engine.Registration.Interface;
 using Company.Manager.Membership.Impl;
 using Company.Manager.Membership.Interface;
-using Company.Utility.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.IO;
 using System.Net;
+using Zametek.Utility.Logging;
 
 namespace Test.InProc.RestApi
 {
@@ -19,7 +19,7 @@ namespace Test.InProc.RestApi
         public static void Test()
         {
             ILogger serilog = new LoggerConfiguration()
-                .Enrich.FromLoggingProxy()
+                .Enrich.FromLogProxy()
                 .WriteTo.Seq("http://localhost:5341")
                 .CreateLogger();
             Log.Logger = serilog;
@@ -29,17 +29,9 @@ namespace Test.InProc.RestApi
 
         public static IWebHost BuildWebHost(ILogger serilog)
         {
-            //var userAccess = new UserAccess(new NullLogger<IUserAccess>());
-
-            //var patientAccess = new PatientAccess(new NullLogger<IPatientAccess>());
-
-            //var registrationEngine = new RegistrationEngine(userAccess, patientAccess, new NullLogger<IRegistrationEngine>());
-
-            //var membershipManager = new MembershipManager(registrationEngine, new NullLogger<IMembershipManager>());
-
-            var userAccess = LoggingProxy.Create<IUserAccess>(new UserAccess(serilog), serilog);
-            var registrationEngine = LoggingProxy.Create<IRegistrationEngine>(new RegistrationEngine(userAccess, serilog), serilog);
-            var membershipManager = LoggingProxy.Create<IMembershipManager>(new MembershipManager(registrationEngine, serilog), serilog);
+            var userAccess = LogProxy.Create<IUserAccess>(new UserAccess(serilog), serilog);
+            var registrationEngine = LogProxy.Create<IRegistrationEngine>(new RegistrationEngine(userAccess, serilog), serilog);
+            var membershipManager = LogProxy.Create<IMembershipManager>(new MembershipManager(registrationEngine, serilog), serilog);
 
             var restApiLogger = serilog;
 

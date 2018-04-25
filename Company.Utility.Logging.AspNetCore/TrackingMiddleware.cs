@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Zametek.Utility;
+using Zametek.Utility.Logging;
 
 namespace Company.Utility.Logging.AspNetCore
 {

@@ -7,11 +7,11 @@
 
   <ItemGroup>
     <PackageReference Include="Serilog" Version="2.6.0" />
+    <PackageReference Include="Zametek.Utility.Logging" Version="0.6.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Company.Access.User.Interface\Company.Access.User.Interface.csproj" />
-    <ProjectReference Include="..\Company.Utility.Logging\Company.Utility.Logging.csproj" />
   </ItemGroup>
 
 </Project>

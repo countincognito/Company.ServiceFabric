@@ -1,12 +1,12 @@
 ﻿using Company.ServiceFabric.Common;
 using Company.ServiceFabric.Logging.Serilog;
-using Company.Utility.Logging;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Serilog;
 using System;
 using System.Diagnostics;
 using System.Fabric;
 using System.Threading;
+using Zametek.Utility.Logging;
 
 namespace Company.Api.Rest.Service
 {
@@ -21,7 +21,7 @@ namespace Company.Api.Rest.Service
                     ConfigurationPackage configPackage = context.CodePackageActivationContext.GetConfigurationPackageObject(@"Config");
                     ILogger serilog = new LoggerConfiguration()
                         .Enrich.FromServiceContext(context)
-                        .Enrich.FromLoggingProxy()
+                        .Enrich.FromLogProxy()
                         .WriteTo.Seq(configPackage.Settings.Sections[@"ResourceSettings"].Parameters[@"seqLocation"].Value)
                         .CreateLogger();
                     Log.Logger = serilog;

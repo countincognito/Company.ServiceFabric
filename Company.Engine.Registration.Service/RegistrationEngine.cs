@@ -3,7 +3,6 @@ using Company.Common.Data;
 using Company.Engine.Registration.Interface;
 using Company.ServiceFabric.Client;
 using Company.ServiceFabric.Server;
-using Company.Utility.Logging;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.FabricTransport.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Runtime;
@@ -14,6 +13,7 @@ using System.Collections.Generic;
 using System.Fabric;
 using System.Threading;
 using System.Threading.Tasks;
+using Zametek.Utility.Logging;
 
 namespace Company.Engine.Registration.Service
 {
@@ -30,7 +30,7 @@ namespace Company.Engine.Registration.Service
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             var userAccess = TrackingProxy.ForComponent<IUserAccess>(this);
-            _Impl = LoggingProxy.Create<IRegistrationEngine>(new Impl.RegistrationEngine(userAccess, logger), logger);
+            _Impl = LogProxy.Create<IRegistrationEngine>(new Impl.RegistrationEngine(userAccess, logger), logger);
             _Logger.Information("Constructed");
         }
 

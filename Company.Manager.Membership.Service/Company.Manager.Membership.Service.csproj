@@ -23,7 +23,6 @@
     <ProjectReference Include="..\Company.ServiceFabric.Common\Company.ServiceFabric.Common.csproj" />
     <ProjectReference Include="..\Company.ServiceFabric.Logging.Serilog\Company.ServiceFabric.Logging.Serilog.csproj" />
     <ProjectReference Include="..\Company.ServiceFabric.Server\Company.ServiceFabric.Server.csproj" />
-    <ProjectReference Include="..\Company.Utility.Logging\Company.Utility.Logging.csproj" />
   </ItemGroup>
 
 </Project>

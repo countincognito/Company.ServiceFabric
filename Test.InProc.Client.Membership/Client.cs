@@ -5,13 +5,13 @@ using Company.Engine.Registration.Impl;
 using Company.Engine.Registration.Interface;
 using Company.Manager.Membership.Impl;
 using Company.Manager.Membership.Interface;
-using Company.Utility.Logging;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Zametek.Utility;
+using Zametek.Utility.Logging;
 
 namespace Test.InProc.Membership
 {
@@ -79,7 +79,7 @@ namespace Test.InProc.Membership
         public static void Test()
         {
             ILogger serilog = new LoggerConfiguration()
-                .Enrich.FromLoggingProxy()
+                .Enrich.FromLogProxy()
                 .WriteTo.Seq("http://localhost:5341")
                 .CreateLogger();
             Log.Logger = serilog;
@@ -93,9 +93,9 @@ namespace Test.InProc.Membership
 
         public static IMembershipManager GetProxy(ILogger serilog)
         {
-            var userAccess = LoggingProxy.Create<IUserAccess>(new UserAccess(serilog), serilog);
-            var registrationEngine = LoggingProxy.Create<IRegistrationEngine>(new RegistrationEngine(userAccess, serilog), serilog);
-            var membershipManager = LoggingProxy.Create<IMembershipManager>(new MembershipManager(registrationEngine, serilog), serilog);
+            var userAccess = LogProxy.Create<IUserAccess>(new UserAccess(serilog), serilog);
+            var registrationEngine = LogProxy.Create<IRegistrationEngine>(new RegistrationEngine(userAccess, serilog), serilog);
+            var membershipManager = LogProxy.Create<IMembershipManager>(new MembershipManager(registrationEngine, serilog), serilog);
             return membershipManager;
         }
 

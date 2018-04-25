@@ -1,10 +1,10 @@
 ﻿using Company.Access.User.Interface;
 using Company.Common.Data;
 using Company.Engine.Registration.Interface;
-using Company.Utility.Logging;
 using Serilog;
 using System;
 using System.Threading.Tasks;
+using Zametek.Utility.Logging;
 
 namespace Company.Engine.Registration.Impl
 {
