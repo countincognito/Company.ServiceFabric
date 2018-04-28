@@ -4,7 +4,7 @@ using Serilog.Core.Enrichers;
 using System;
 using System.Fabric;
 
-namespace Company.ServiceFabric.Logging.Serilog
+namespace Company.ServiceFabric.Logging
 {
     public static class LoggingExtensions
     {

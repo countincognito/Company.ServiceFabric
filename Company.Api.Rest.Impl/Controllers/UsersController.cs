@@ -29,9 +29,6 @@ namespace Company.Api.Rest.Service
             _MembershipManager = membershipManager ?? throw new ArgumentNullException(nameof(membershipManager));
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            // Just in case we decide to go InProc.
-            //
-
             Debug.Assert(TrackingContext.Current != null);
         }
 

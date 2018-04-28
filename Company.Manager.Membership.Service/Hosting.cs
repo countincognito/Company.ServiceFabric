@@ -1,5 +1,5 @@
 ﻿using Company.ServiceFabric.Common;
-using Company.ServiceFabric.Logging.Serilog;
+using Company.ServiceFabric.Logging;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Serilog;
 using System;

@@ -24,7 +24,7 @@
     <ProjectReference Include="..\Company.Manager.Membership.Interface\Company.Manager.Membership.Interface.csproj" />
     <ProjectReference Include="..\Company.ServiceFabric.Client\Company.ServiceFabric.Client.csproj" />
     <ProjectReference Include="..\Company.ServiceFabric.Common\Company.ServiceFabric.Common.csproj" />
-    <ProjectReference Include="..\Company.ServiceFabric.Logging.Serilog\Company.ServiceFabric.Logging.Serilog.csproj" />
+    <ProjectReference Include="..\Company.ServiceFabric.Logging\Company.ServiceFabric.Logging.csproj" />
   </ItemGroup>
 
 </Project>
