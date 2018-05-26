@@ -30,7 +30,7 @@ namespace Company.Manager.Membership.Service
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             var registrationEngine = TrackingProxy.ForComponent<IRegistrationEngine>(this);
-            _Impl = LogProxy.Create<IMembershipManager>(new Impl.MembershipManager(registrationEngine, logger), logger);
+            _Impl = LogProxy.Create<IMembershipManager>(new Impl.MembershipManager(registrationEngine, logger), logger, LogType.All);
             _Logger.Information("Constructed");
         }
 

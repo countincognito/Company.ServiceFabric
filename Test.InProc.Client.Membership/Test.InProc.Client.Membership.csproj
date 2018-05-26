@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Serilog.Sinks.Seq" Version="4.0.0" />
-    <PackageReference Include="Zametek.Utility.Logging" Version="0.6.2" />
+    <PackageReference Include="Zametek.Utility.Logging" Version="0.7.0" />
   </ItemGroup>
 
   <ItemGroup>

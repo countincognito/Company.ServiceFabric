@@ -1,5 +1,6 @@
 ﻿using Company.ServiceFabric.Common;
 using Company.ServiceFabric.Logging;
+using Destructurama;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Serilog;
 using System;
@@ -22,6 +23,7 @@ namespace Company.Api.Rest.Service
                     ILogger serilog = new LoggerConfiguration()
                         .Enrich.FromServiceContext(context)
                         .Enrich.FromLogProxy()
+                        .Destructure.UsingAttributes()
                         .WriteTo.Seq(configPackage.Settings.Sections[@"ResourceSettings"].Parameters[@"seqLocation"].Value)
                         .CreateLogger();
                     Log.Logger = serilog;

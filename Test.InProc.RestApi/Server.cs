@@ -5,6 +5,7 @@ using Company.Engine.Registration.Impl;
 using Company.Engine.Registration.Interface;
 using Company.Manager.Membership.Impl;
 using Company.Manager.Membership.Interface;
+using Destructurama;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -20,6 +21,7 @@ namespace Test.InProc.RestApi
         {
             ILogger serilog = new LoggerConfiguration()
                 .Enrich.FromLogProxy()
+                .Destructure.UsingAttributes()
                 .WriteTo.Seq("http://localhost:5341")
                 .CreateLogger();
             Log.Logger = serilog;
@@ -29,9 +31,9 @@ namespace Test.InProc.RestApi
 
         public static IWebHost BuildWebHost(ILogger serilog)
         {
-            var userAccess = LogProxy.Create<IUserAccess>(new UserAccess(serilog), serilog);
-            var registrationEngine = LogProxy.Create<IRegistrationEngine>(new RegistrationEngine(userAccess, serilog), serilog);
-            var membershipManager = LogProxy.Create<IMembershipManager>(new MembershipManager(registrationEngine, serilog), serilog);
+            var userAccess = LogProxy.Create<IUserAccess>(new UserAccess(serilog), serilog, LogType.All);
+            var registrationEngine = LogProxy.Create<IRegistrationEngine>(new RegistrationEngine(userAccess, serilog), serilog, LogType.All);
+            var membershipManager = LogProxy.Create<IMembershipManager>(new MembershipManager(registrationEngine, serilog), serilog, LogType.All);
 
             var restApiLogger = serilog;
 

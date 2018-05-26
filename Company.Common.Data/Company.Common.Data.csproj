@@ -5,4 +5,8 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Destructurama.Attributed" Version="2.0.0" />
+  </ItemGroup>
+
 </Project>

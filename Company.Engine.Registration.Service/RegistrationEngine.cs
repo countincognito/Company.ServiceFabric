@@ -30,7 +30,7 @@ namespace Company.Engine.Registration.Service
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             var userAccess = TrackingProxy.ForComponent<IUserAccess>(this);
-            _Impl = LogProxy.Create<IRegistrationEngine>(new Impl.RegistrationEngine(userAccess, logger), logger);
+            _Impl = LogProxy.Create<IRegistrationEngine>(new Impl.RegistrationEngine(userAccess, logger), logger, LogType.All);
             _Logger.Information("Constructed");
         }
 

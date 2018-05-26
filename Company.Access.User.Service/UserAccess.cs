@@ -26,7 +26,7 @@ namespace Company.Access.User.Service
             : base(context)
         {
             _Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _Impl = LogProxy.Create<IUserAccess>(new Impl.UserAccess(logger), logger);
+            _Impl = LogProxy.Create<IUserAccess>(new Impl.UserAccess(logger), logger, LogType.All);
             _Logger.Information("Constructed");
         }
 

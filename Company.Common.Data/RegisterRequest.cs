@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Destructurama.Attributed;
+using System;
 
 namespace Company.Common.Data
 {
@@ -9,6 +10,7 @@ namespace Company.Common.Data
 
         public string Email { get; set; }
 
+        [NotLogged]
         public string Password { get; set; }
 
         public DateTime? DateOfBirth { get; set; }

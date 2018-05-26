@@ -8,7 +8,7 @@ using Zametek.Utility.Logging;
 
 namespace Company.Engine.Registration.Impl
 {
-    [NoDiagnosticLogging]
+    [DiagnosticLogging(LogActive.On)]
     public class RegistrationEngine
         : IRegistrationEngine
     {

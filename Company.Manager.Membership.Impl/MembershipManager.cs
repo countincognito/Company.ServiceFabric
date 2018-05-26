@@ -4,9 +4,11 @@ using Company.Manager.Membership.Interface;
 using Serilog;
 using System;
 using System.Threading.Tasks;
+using Zametek.Utility.Logging;
 
 namespace Company.Manager.Membership.Impl
 {
+    [DiagnosticLogging(LogActive.On)]
     public class MembershipManager
         : IMembershipManager
     {
