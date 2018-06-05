@@ -5,7 +5,7 @@
     <Parameter Name="Service_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="Service_PartitionCount" DefaultValue="1" />
     <Parameter Name="Service_TargetReplicaSetSize" DefaultValue="3" />
-    <Parameter Name="apiCertThumbprint" DefaultValue="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
+    <Parameter Name="apiCertThumbprint" DefaultValue="21d6da580e0d7f80cafdb918c8be50c6034357ac" />
     <Parameter Name="seqLocation" DefaultValue="http://localhost:5341" />
   </Parameters>
   <ServiceManifestImport>
