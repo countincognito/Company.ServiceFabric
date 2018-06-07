@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
@@ -11,6 +12,11 @@ namespace Company.Api.Rest.Impl
 {
     public class Startup
     {
+        public const string RemoteIpAddressName = nameof(ConnectionInfo.RemoteIpAddress);
+        public const string TraceIdentifierName = nameof(HttpContext.TraceIdentifier);
+        public const string UserIdName = @"UserId";
+        public const string ConnectionIdName = @"ConnectionId";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -43,8 +49,12 @@ namespace Company.Api.Rest.Impl
             }
 
             app.UseTrackingMiddleware(
-                () => new Dictionary<string, string>()
+                (context) => new Dictionary<string, string>()
                 {
+                    { RemoteIpAddressName, context.Connection?.RemoteIpAddress?.ToString() },
+                    { TraceIdentifierName, context.TraceIdentifier },
+                    { UserIdName, context.User?.Identity?.Name },
+                    { ConnectionIdName, context.Connection.Id },
                     { "Jurisdiction", "UK" },
                     { "New call-specific random string", System.Guid.NewGuid().ToString() }
                 });
