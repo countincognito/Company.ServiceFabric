@@ -28,7 +28,7 @@ namespace Test.InProc.Membership
                 var tasks = new List<Task<string>>();
                 for (int i = 0; i < 10; i++)
                 {
-                    // THIS IS NECESSARY FOR INPROC CALLS.
+                    // This renews the call chain ID.
                     TrackingContext.NewCurrent();
 
                     Debug.Assert(TrackingContext.Current != null);
@@ -60,7 +60,7 @@ namespace Test.InProc.Membership
                 var proxy = GetProxy(serilog);
                 for (int i = 0; i < 10; i++)
                 {
-                    // THIS IS NECESSARY FOR INPROC CALLS.
+                    // This renews the call chain ID.
                     TrackingContext.NewCurrent();
 
                     Debug.Assert(TrackingContext.Current != null);
