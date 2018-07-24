@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Company.Manager.Membership.Interface\Company.Manager.Membership.Interface.csproj" />
-    <ProjectReference Include="..\Company.ServiceFabric.Client\Company.ServiceFabric.Client.csproj" />
+    <ProjectReference Include="..\..\src\Company.Manager.Membership.Interface\Company.Manager.Membership.Interface.csproj" />
+    <ProjectReference Include="..\..\src\Company.ServiceFabric.Client\Company.ServiceFabric.Client.csproj" />
   </ItemGroup>
 
 </Project>

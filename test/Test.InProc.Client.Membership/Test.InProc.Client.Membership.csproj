@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog.Sinks.Seq" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Company.Access.User.Impl\Company.Access.User.Impl.csproj" />
+    <ProjectReference Include="..\..\src\Company.Engine.Registration.Impl\Company.Engine.Registration.Impl.csproj" />
+    <ProjectReference Include="..\..\src\Company.Manager.Membership.Impl\Company.Manager.Membership.Impl.csproj" />
+  </ItemGroup>
+
+</Project>
